@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1장. 웹 개발 환경 구축 및 JSP</title>
+<style>
+:root{
+  --navy:#1e3a5f; --blue:#2b6cb0; --sky:#e8f2fb; --accent:#e07b00;
+  --ink:#1f2933; --muted:#5b6875; --line:#d7e0ea; --code-bg:#1e293b;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; font-family:"Malgun Gothic","맑은 고딕",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--ink); line-height:1.7; background:#f4f6f9;
+}
+.wrap{max-width:960px; margin:0 auto; background:#fff; box-shadow:0 0 30px rgba(0,0,0,.06);}
+/* Cover */
+.cover{
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  color:#fff; padding:80px 50px; text-align:center;
+}
+.cover .eyebrow{font-size:15px; letter-spacing:4px; opacity:.85; margin-bottom:18px;}
+.cover h1{font-size:40px; margin:0 0 14px; font-weight:800; line-height:1.3;}
+.cover .sub{font-size:18px; opacity:.9; letter-spacing:2px;}
+/* Nav */
+nav.toc{
+  background:var(--sky); padding:26px 50px; border-bottom:1px solid var(--line);
+}
+nav.toc h2{margin:0 0 14px; font-size:16px; color:var(--navy); letter-spacing:1px;}
+nav.toc ol{margin:0; padding-left:20px; columns:2; column-gap:40px;}
+nav.toc li{margin:6px 0;}
+nav.toc a{color:var(--blue); text-decoration:none; font-size:14.5px;}
+nav.toc a:hover{text-decoration:underline;}
+/* Content */
+main{padding:10px 50px 60px;}
+section{padding:34px 0; border-bottom:1px solid var(--line);}
+section:last-child{border-bottom:none;}
+.ch-num{
+  display:inline-block; background:var(--accent); color:#fff; font-size:13px;
+  font-weight:700; padding:4px 12px; border-radius:20px; letter-spacing:1px; margin-bottom:12px;
+}
+h2.title{font-size:26px; color:var(--navy); margin:6px 0 22px; font-weight:800;
+  border-left:6px solid var(--accent); padding-left:14px;}
+h3{font-size:19px; color:var(--blue); margin:28px 0 10px; font-weight:700;}
+h4{font-size:16px; color:var(--navy); margin:20px 0 6px;}
+p{margin:10px 0;}
+ul,ol.steps{margin:10px 0; padding-left:22px;}
+li{margin:6px 0;}
+.lead{font-size:16px; color:var(--muted);}
+/* callouts */
+.note{
+  background:var(--sky); border-left:4px solid var(--blue);
+  padding:14px 18px; border-radius:0 8px 8px 0; margin:16px 0; font-size:14.5px;
+}
+.tip{
+  background:#fff7e8; border-left:4px solid var(--accent);
+  padding:14px 18px; border-radius:0 8px 8px 0; margin:16px 0; font-size:14.5px;
+}
+.tip strong,.note strong{color:var(--navy);}
+/* code */
+code.inline{background:#eef2f7; color:#b23; padding:2px 7px; border-radius:5px;
+  font-family:Consolas,Menlo,monospace; font-size:13.5px;}
+pre{background:var(--code-bg); color:#e2e8f0; padding:18px 20px; border-radius:10px;
+  overflow-x:auto; font-family:Consolas,Menlo,monospace; font-size:13.5px; line-height:1.6;}
+pre .tag{color:#7dd3fc;} pre .cm{color:#94a3b8;} pre .kw{color:#f0abfc;} pre .str{color:#bef264;}
+/* table */
+table{border-collapse:collapse; width:100%; margin:16px 0; font-size:14.5px;}
+th,td{border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top;}
+th{background:var(--navy); color:#fff; font-weight:600;}
+tbody tr:nth-child(even){background:#f7fafc;}
+/* figure */
+figure{margin:22px 0; text-align:center;}
+figure img{max-width:100%; border:1px solid var(--line); border-radius:8px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);}
+figcaption{font-size:13px; color:var(--muted); margin-top:8px;}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+@media(max-width:700px){nav.toc ol{columns:1;} .grid2{grid-template-columns:1fr;} main,nav.toc,.cover{padding-left:22px; padding-right:22px;}}
+footer{background:var(--navy); color:#cbd5e1; text-align:center; padding:24px; font-size:13px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="topbar" style="background:#1e3a5f;padding:11px 50px;"><a href="목차.html" style="color:#cbd5e1;text-decoration:none;font-size:13px;">← 전체 목차</a></div>
+
+<!-- 표지 -->
+<div class="cover">
+  <div class="eyebrow">JAVA 웹 &amp; JSP</div>
+  <h1>1장. 웹 개발 환경 구축 및 JSP</h1>
+  <div class="sub">JDK · Eclipse · Tomcat · JSP 기초</div>
+</div>
+
+<!-- 목차 -->
+<nav class="toc">
+  <h2>학습 목차</h2>
+  <ol>
+    <li><a href="#s1">JSP 개요와 동작 원리</a></li>
+    <li><a href="#s2">JSP의 특징</a></li>
+    <li><a href="#s3">Java 웹 개발 환경 구축</a></li>
+    <li><a href="#s4">웹 애플리케이션 만들기</a></li>
+    <li><a href="#s5">웹 페이지(HTML·CSS·JS) 만들기</a></li>
+    <li><a href="#s6">JSP 스크립트 태그</a></li>
+    <li><a href="#s7">JSP 디렉티브 태그</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- 1 -->
+<section id="s1">
+  <span class="ch-num">SECTION 1</span>
+  <h2 class="title">JSP 개요와 동작 원리</h2>
+
+  <h3>1. JSP란?</h3>
+  <p class="lead">JSP(Java Server Page)는 <strong>HTML 안에 Java 코드를 삽입</strong>하여 동적으로 페이지를 생성하는 서버 측 스크립트 기술이다.</p>
+  <ul>
+    <li>구성: <code class="inline">JSP = HTML + Java 코드</code></li>
+    <li>확장자: <code class="inline">.jsp</code></li>
+    <li>서버에서 실행되는 스크립트 기반 기술이다.</li>
+    <li>클라이언트(브라우저)에게는 최종적으로 <strong>HTML</strong>이 전달된다.</li>
+  </ul>
+
+  <h3>2. JSP 동작 원리</h3>
+  <ol class="steps">
+    <li>사용자가 <code class="inline">hello.jsp</code>를 요청한다.</li>
+    <li>웹 컨테이너(Tomcat)가 JSP 파일을 <strong>서블릿(Java 클래스)</strong>으로 변환한다. (예: <code class="inline">hello_jsp.java</code>)</li>
+    <li>변환된 서블릿을 <strong>컴파일 → 실행</strong>한다.</li>
+    <li>결과 HTML을 브라우저로 응답한다.</li>
+  </ol>
+  <figure>
+    <img src="ch1_img/page03.png" alt="JSP 동작 원리 다이어그램">
+    <figcaption>JSP 요청 → 변환 → 컴파일 → 응답 처리 흐름 (정적 파일은 웹 서버, 동적 파일은 웹 컨테이너가 처리)</figcaption>
+  </figure>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+  <span class="ch-num">SECTION 2</span>
+  <h2 class="title">JSP의 특징</h2>
+  <ul>
+    <li><strong>서블릿 기술의 확장이다.</strong> 처음에는 서버 측 프로그래밍으로 서블릿(Servlet)을 개발했으나, 개발 방식이 쉽지 않아 HTML 코드에 Java를 삽입하는 JSP가 개발되었다.</li>
+    <li><strong>유지 관리가 용이하다.</strong> 서블릿은 프레젠테이션(View)과 비즈니스 로직(Control)이 섞여 있지만, JSP는 이를 분리할 수 있어 관리가 쉽다.</li>
+    <li><strong>빠른 개발이 가능하다.</strong> 코드를 수정했을 때 서블릿은 다시 컴파일해야 하지만, JSP는 컴파일하지 않는다.</li>
+    <li><strong>코드 길이를 줄일 수 있다.</strong> 액션 태그, 표현 언어(EL), JSTL을 사용하여 서블릿보다 코드 길이를 줄일 수 있다.</li>
+  </ul>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+  <span class="ch-num">SECTION 3</span>
+  <h2 class="title">Java 웹 개발 환경 구축</h2>
+
+  <h3>JSP 웹사이트 개발 도구</h3>
+  <table>
+    <thead><tr><th>요소</th><th>프로그램</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td>자바 개발 환경</td><td>JDK</td><td>JSP는 HTML 코드 내에 자바 코드를 작성하므로 JDK가 반드시 설치되어야 함</td></tr>
+      <tr><td>통합개발환경</td><td>이클립스</td><td>JSP 코드를 컴파일·실행할 수 있는 IDE. <em>Eclipse IDE for Enterprise Java Developers</em> 설치</td></tr>
+      <tr><td>웹 서버(WAS)</td><td>톰캣</td><td>웹 페이지를 브라우저에 표시하기 위한 웹 컨테이너. 대표적인 무료 오픈소스 웹 서버가 톰캣이다.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>① JDK(Java Development Kit) 설치</h3>
+  <p>오라클 Java 다운로드 → <strong>Windows &gt; Java SE 21</strong> 다운로드 → <code class="inline">x64 Installer</code> 실행</p>
+  <figure><img src="ch1_img/page06.png" alt="JDK 다운로드 화면"><figcaption>오라클 사이트에서 Java SE 21 x64 인스톨러 내려받기</figcaption></figure>
+
+  <h3>② 이클립스(Eclipse) IDE 설치</h3>
+  <ul>
+    <li>다운로드: <code class="inline">https://www.eclipse.org/downloads/</code></li>
+    <li>Workspace(작업공간) 설정: <code class="inline">C:\JspWorkSpace</code></li>
+    <li><strong>Java EE / Web Service</strong> 포함 버전 설치</li>
+  </ul>
+  <figure><img src="ch1_img/page07.png" alt="이클립스 다운로드 및 워크스페이스 설정"><figcaption>이클립스 다운로드 &amp; 워크스페이스 지정</figcaption></figure>
+
+  <h4>자바 개발 환경(Perspective) 변경</h4>
+  <p><em>Open Perspective</em> 선택 후 <strong>Java</strong>로 변경한다. 웹 프로젝트를 만들 때는 <strong>Java EE</strong>로 변경한다.</p>
+  <figure><img src="ch1_img/page08.png" alt="Perspective 변경"><figcaption>Perspective를 Java / Java EE로 전환</figcaption></figure>
+
+  <h4>인코딩 설정</h4>
+  <p>HTML, CSS, JSP의 문자 인코딩을 UTF-8로 변경한다.</p>
+  <div class="note"><strong>경로:</strong> Web &gt; CSS Files(HTML, JSP Files) &gt; Encoding &gt; <code class="inline">ISO 10646/Unicode(UTF-8)</code></div>
+  <figure><img src="ch1_img/page09.png" alt="인코딩 UTF-8 설정"><figcaption>텍스트 인코딩을 UTF-8로 변경</figcaption></figure>
+
+  <h3>③ 톰캣(Tomcat) 설치</h3>
+  <ul>
+    <li>아파치 사이트 접속: <code class="inline">http://tomcat.apache.org</code></li>
+    <li><strong>64-bit Windows.zip</strong> 다운로드 → C드라이브에 압축 풀기</li>
+  </ul>
+  <div class="grid2">
+    <figure><img src="ch1_img/page10.png" alt="톰캣 사이트"><figcaption>아파치 톰캣 다운로드 페이지</figcaption></figure>
+    <figure><img src="ch1_img/page11.png" alt="톰캣 압축 풀기"><figcaption>64-bit Windows.zip을 C드라이브에 압축 해제</figcaption></figure>
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+  <span class="ch-num">SECTION 4</span>
+  <h2 class="title">웹 애플리케이션 만들기</h2>
+
+  <h3>① 웹 프로젝트(Dynamic Web Project) 생성</h3>
+  <p><strong>File &gt; New &gt; Dynamic Web Project</strong> 선택 → ② 프로젝트 이름 입력 → ③ 톰캣 서버 설정 → ④⑤ <code class="inline">web.xml</code> 생성 체크</p>
+  <div class="grid2">
+    <figure><img src="ch1_img/page12.png" alt="Dynamic Web Project 생성"><figcaption>Create Dynamic Web Project</figcaption></figure>
+    <figure><img src="ch1_img/page13.png" alt="프로젝트 이름 및 서버 설정"><figcaption>프로젝트 이름·서버·web.xml 설정</figcaption></figure>
+  </div>
+
+  <h3>② JSP 파일 만들기</h3>
+  <p><strong>webapp &gt; New &gt; JSP File</strong> → File name: <code class="inline">hello.jsp</code></p>
+  <div class="tip"><strong>지시어(디렉티브 태그) <code class="inline">&lt;%@ ... %&gt;</code></strong> : JSP 파일의 정보(언어, 문서 유형, 인코딩 등)를 서버에게 알려준다.</div>
+  <div class="grid2">
+    <figure><img src="ch1_img/page14.png" alt="JSP 파일 생성"><figcaption>hello.jsp 생성</figcaption></figure>
+    <figure><img src="ch1_img/page15.png" alt="지시어 태그"><figcaption>page 지시어로 JSP 정보 설정</figcaption></figure>
+  </div>
+
+  <h3>③ 서버 실행 &amp; 브라우저 확인</h3>
+  <p><code class="inline">hello.jsp</code> &gt; 우클릭 &gt; <strong>Run As &gt; Run on Server</strong>로 실행한다.</p>
+  <div class="grid2">
+    <figure><img src="ch1_img/page16.png" alt="Run on Server"><figcaption>Run As &gt; Run on Server</figcaption></figure>
+    <figure><img src="ch1_img/page17.png" alt="브라우저 실행 결과"><figcaption>웹 브라우저 실행 결과</figcaption></figure>
+  </div>
+  <h4>브라우저를 크롬으로 설정</h4>
+  <p><strong>General &gt; Web Browser &gt; Chrome</strong></p>
+  <figure><img src="ch1_img/page18.png" alt="크롬 브라우저 설정"><figcaption>기본 웹 브라우저를 크롬으로 지정</figcaption></figure>
+
+  <h3>④ 현재 날짜와 시간 출력</h3>
+  <div class="tip"><strong>표현식(Expression) <code class="inline">&lt;%= ... %&gt;</code></strong> : JSP에서 값을 <strong>출력</strong>할 때 사용한다.</div>
+  <figure><img src="ch1_img/page19.png" alt="날짜 시간 출력"><figcaption>표현식으로 현재 날짜·시간 출력</figcaption></figure>
+
+  <h3>⑤ 포트 번호 확인 및 변경</h3>
+  <p>서버를 더블 클릭하여 포트 번호를 확인·변경할 수 있다.</p>
+  <figure><img src="ch1_img/page20.png" alt="포트 번호 변경"><figcaption>톰캣 서버 포트 번호 설정</figcaption></figure>
+
+  <h3>⑥ 웹 컨텍스트 경로(Path) 변경</h3>
+  <div class="note"><strong>경로:</strong> Tomcat v9.0 Server &gt; Modules &gt; Edit &gt; <code class="inline">chap01</code> 지우고 <code class="inline">/</code>(루트)로 변경</div>
+  <figure><img src="ch1_img/page21.png" alt="컨텍스트 경로 변경"><figcaption>컨텍스트 경로를 루트(/)로 변경</figcaption></figure>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+  <span class="ch-num">SECTION 5</span>
+  <h2 class="title">웹 페이지(HTML·CSS·JavaScript) 만들기</h2>
+  <p>정적(static) 파일을 저장하기 위해 <strong>webapp 하위에 <code class="inline">resources</code> 폴더</strong>를 생성한다.</p>
+  <div class="grid2">
+    <figure><img src="ch1_img/page22.png" alt="웹 페이지 만들기"><figcaption>HTML·CSS·JavaScript 웹 페이지</figcaption></figure>
+    <figure><img src="ch1_img/page23.png" alt="resources 폴더 생성"><figcaption>resources 폴더에 정적 파일 저장</figcaption></figure>
+  </div>
+  <h3>time.jsp 예제</h3>
+  <div class="grid2">
+    <figure><img src="ch1_img/page24.png" alt="time.jsp 코드"><figcaption>time.jsp 소스 코드</figcaption></figure>
+    <figure><img src="ch1_img/page25.png" alt="time.jsp 실행 결과"><figcaption>time.jsp 실행 결과</figcaption></figure>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+  <span class="ch-num">SECTION 6</span>
+  <h2 class="title">JSP 스크립트 태그</h2>
+  <h3>JSP 태그의 종류</h3>
+  <ul>
+    <li><strong>스크립트 태그</strong> : HTML 코드에 자바 코드를 넣어 프로그램을 수행하는 기능</li>
+    <li><strong>디렉티브 태그</strong> : 현재 JSP 페이지에 대한 정보를 설정하는 태그</li>
+    <li><strong>액션 태그</strong> : 클라이언트/서버에 어떤 작동을 행하도록 명령을 지시하는 태그</li>
+  </ul>
+
+  <h3>스크립트 태그(Script Tag)</h3>
+  <table>
+    <thead><tr><th>태그</th><th>형식</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td>선언문(declaration)</td><td><code class="inline">&lt;%! %&gt;</code></td><td>자바 변수나 메소드를 정의하는 데 사용</td></tr>
+      <tr><td>스크립트릿(scriptlet)</td><td><code class="inline">&lt;% %&gt;</code></td><td>자바 로직 코드를 작성하는 데 사용</td></tr>
+      <tr><td>표현문(expression)</td><td><code class="inline">&lt;%= %&gt;</code></td><td>변수·메소드 호출 결과를 문자열로 출력해 줌</td></tr>
+    </tbody>
+  </table>
+  <div class="note">참고 문서: <code class="inline">https://docs.oracle.com/javaee/5/tutorial/doc/</code> (구글에 "JSP Document" 검색)</div>
+
+  <h3>스크립트 태그 예제</h3>
+  <div class="grid2">
+    <figure><img src="ch1_img/page28.png" alt="스크립트 태그 예제"><figcaption>스크립트 태그 예제 코드</figcaption></figure>
+    <figure><img src="ch1_img/page29.png" alt="소스 보기 결과"><figcaption>소스 보기 — JSP 태그는 서버에서 처리되어 클라이언트에는 보이지 않음</figcaption></figure>
+  </div>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+  <span class="ch-num">SECTION 7</span>
+  <h2 class="title">JSP 디렉티브 태그</h2>
+  <p>디렉티브 태그는 <strong>JSP 페이지를 어떻게 처리할 것인지를 설정</strong>하는 태그이다. JSP 페이지가 서블릿 클래스로 변환될 때, 관련 정보를 JSP 컨테이너에 지시하는 메시지이다.</p>
+
+  <h3>디렉티브 태그의 종류</h3>
+  <table>
+    <thead><tr><th>태그</th><th>형식</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td>page</td><td><code class="inline">&lt;%@ page … %&gt;</code></td><td>JSP 페이지에 대한 정보를 설정</td></tr>
+      <tr><td>include</td><td><code class="inline">&lt;%@ include … %&gt;</code></td><td>JSP 페이지의 특정 영역에 다른 문서 포함</td></tr>
+      <tr><td>taglib</td><td><code class="inline">&lt;%@ taglib … %&gt;</code></td><td>JSP 페이지에 사용할 태그 라이브러리 설정</td></tr>
+    </tbody>
+  </table>
+
+  <h3>page 디렉티브 — contentType 속성</h3>
+  <p>콘텐츠 문서의 유형, 사용할 자바 클래스, 오류 페이지 설정, 세션 사용 여부 등을 설정한다.</p>
+  <pre><span class="tag">&lt;%@ page contentType = "문서의 유형" %&gt;</span></pre>
+
+  <h3>page 디렉티브 — import 속성</h3>
+  <p>JSP에서 사용할 자바 클래스를 가져온다.</p>
+  <pre><span class="tag">&lt;%@ page import = "자바클래스" %&gt;</span></pre>
+  <div class="grid2">
+    <figure><img src="ch1_img/page32.png" alt="import 예제"><figcaption>page import 예제</figcaption></figure>
+    <figure><img src="ch1_img/page33.png" alt="page 디렉티브 실행"><figcaption>page 디렉티브 실행 결과</figcaption></figure>
+  </div>
+
+  <h3>include 디렉티브 태그</h3>
+  <pre><span class="tag">&lt;%@ include file="파일명" %&gt;</span></pre>
+  <ul>
+    <li>현재 JSP의 특정 영역에 외부 파일의 내용을 포함한다.</li>
+    <li>머리글·바닥글처럼 <strong>공통된 부분을 별도의 JSP 파일로 만들어 모듈화</strong>할 수 있다.</li>
+  </ul>
+  <div class="grid2">
+    <figure><img src="ch1_img/page35.png" alt="header.jsp"><figcaption>include/header.jsp</figcaption></figure>
+    <figure><img src="ch1_img/page36.png" alt="footer.jsp"><figcaption>include/footer.jsp</figcaption></figure>
+  </div>
+  <figure><img src="ch1_img/page37.png" alt="main.jsp"><figcaption>include/main.jsp — header·footer를 포함해 완성</figcaption></figure>
+</section>
+
+</main>
+
+<footer>1장. 웹 개발 환경 구축 및 JSP · JAVA 웹 &amp; JSP 강의 교안</footer>
+</div>
+</body>
+</html>

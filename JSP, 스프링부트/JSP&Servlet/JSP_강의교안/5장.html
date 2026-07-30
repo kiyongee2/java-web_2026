@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5장. EL과 JSTL</title><style>
+:root{--navy:#1e3a5f;--blue:#2b6cb0;--sky:#e8f2fb;--accent:#e07b00;--ink:#1f2933;--muted:#5b6875;--line:#d7e0ea;--code-bg:#1e293b;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:"Malgun Gothic","맑은 고딕",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);line-height:1.7;background:#f4f6f9;}
+.wrap{max-width:960px;margin:0 auto;background:#fff;box-shadow:0 0 30px rgba(0,0,0,.06);}
+.cover{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:78px 50px;text-align:center;}
+.cover .eyebrow{font-size:15px;letter-spacing:4px;opacity:.85;margin-bottom:18px;}
+.cover h1{font-size:36px;margin:0 0 14px;font-weight:800;line-height:1.3;}
+.cover .sub{font-size:17px;opacity:.9;letter-spacing:1px;}
+.topbar{background:var(--navy);padding:11px 50px;border-bottom:1px solid rgba(255,255,255,.1);}
+.topbar a{color:#cbd5e1;text-decoration:none;font-size:13px;}.topbar a:hover{color:#fff;}
+main{padding:16px 50px 60px;}
+section{padding:26px 0;border-bottom:1px solid var(--line);}
+section:last-child{border-bottom:none;}
+.ch-num{display:inline-block;background:#eef2f7;color:var(--muted);font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:20px;letter-spacing:.5px;margin-bottom:10px;}
+h2.title{font-size:23px;color:var(--navy);margin:6px 0 14px;font-weight:800;border-left:6px solid var(--accent);padding-left:14px;}
+h3{font-size:18px;color:var(--blue);margin:22px 0 8px;font-weight:700;}
+h4{font-size:15.5px;color:var(--navy);margin:16px 0 4px;font-weight:700;}
+p{margin:8px 0;}
+ul{margin:8px 0;padding-left:22px;}li{margin:5px 0;}
+code.inline{background:#eef2f7;color:#b23;padding:2px 7px;border-radius:5px;font-family:Consolas,Menlo,monospace;font-size:13px;}
+pre{background:var(--code-bg);color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;font-family:Consolas,Menlo,monospace;font-size:12.8px;line-height:1.55;white-space:pre;}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px;}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top;}
+th{background:var(--navy);color:#fff;font-weight:600;}
+tbody tr:nth-child(even){background:#f7fafc;}
+figure{margin:18px 0;text-align:center;}
+figure img{max-width:100%;border:1px solid var(--line);border-radius:8px;box-shadow:0 3px 12px rgba(0,0,0,.08);}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:6px;}
+@media(max-width:700px){main,.cover,.topbar{padding-left:20px;padding-right:20px;}}
+footer{background:var(--navy);color:#cbd5e1;text-align:center;padding:22px;font-size:13px;}
+</style></head><body><div class="wrap">
+<div class="topbar"><a href="목차.html">← 전체 목차</a></div>
+<div class="cover"><div class="eyebrow">JAVA 웹 &amp; JSP</div><h1>5장. EL과 JSTL</h1><div class="sub">표현 언어 · JSP 표준 태그 라이브러리</div></div>
+<main>
+<section><span class="ch-num">슬라이드 2</span><h2 class="title">EL(Expression Language)</h2>
+<ul><li>MVC 패턴에 따라 뷰(view) 역할을 수행하는 JSP를 더욱 효과적으로 만들려는 목적으로 개발(개발 배경 : 코드와 태그가 섞여서 복잡해짐)</li><li>JSP 페이지에서 자바 코드를 직접 쓰지 않고, 간단한 표현식으로 데이터(변수, 객체, 속 성 등)를 접근할 수 있게 해주는 기능을 한다. EL 언어란?</li><li>JSP 2.0부터 도입</li><li>${...} 구문을 사용</li><li>JSP 내에서 자바 코드(&lt;% ... %&gt;)를 최소화하고, 보기 쉽게 데이터를 표현하는 목적</li><li>JSP 내장 객체(request, session, application 등)에 담긴 속성 값을 쉽게 꺼낼 수 있음</li></ul>
+</section><section><span class="ch-num">슬라이드 3</span>
+<figure><img src="ch5_img/page03.png" alt="슬라이드 3"><figcaption>슬라이드 3 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 4</span><h2 class="title">EL 언어</h2>
+<figure><img src="ch5_img/page04.png" alt="슬라이드 4"><figcaption>슬라이드 4 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 5</span>
+<figure><img src="ch5_img/page05.png" alt="슬라이드 5"><figcaption>슬라이드 5 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 6</span>
+<p>표현 언어 실습 el/el01.jsp</p>
+<figure><img src="ch5_img/page06.png" alt="슬라이드 6"><figcaption>슬라이드 6 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 7</span><h2 class="title">MVC와 EL 언어</h2>
+<figure><img src="ch5_img/page07.png" alt="슬라이드 7"><figcaption>슬라이드 7 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 8</span><h2 class="title">EL 언어</h2>
+<p>표현 언어 실습</p>
+<figure><img src="ch5_img/page08.png" alt="슬라이드 8"><figcaption>슬라이드 8 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 9</span>
+<p>표현 언어 실습 el/el02.jsp</p>
+<figure><img src="ch5_img/page09.png" alt="슬라이드 9"><figcaption>슬라이드 9 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 10</span>
+<p>표현 언어 실습</p>
+<figure><img src="ch5_img/page10.png" alt="슬라이드 10"><figcaption>슬라이드 10 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 11</span><h2 class="title">JSTL(JSP 표준태그 라이브러리)</h2>
+<p>JSTL(Jsp Standard Tag Library)</p>
+<ul><li>JSTL은 &#x27;JSP Standard Tag Library&#x27;의 약자로, JSP에서 자바 코드 대신 사용 할 수 있는 표준 태그 라이브러리입니다.</li><li>JSTL을 사용하면 스크립틀릿(&lt;% %&gt;)과 같은 자바 코드를 JSP 페이지에서 제거하여 가독성을 높이고, 반복문, 조건문, 데이터베이스 연동 등 일반적 인 작업을 태그 형태로 간편하게 처리할 수 있습니다.</li><li>핵심(Core),  XML,  I18N(국제화),  데이터베이스(SQL),  함수(Function) 라 이브러리로 구성됨.</li><li>일반적으로 EL(Expression Language)과 함께 사용함</li></ul>
+</section><section><span class="ch-num">슬라이드 12</span>
+<figure><img src="ch5_img/page12.png" alt="슬라이드 12"><figcaption>슬라이드 12 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 13</span>
+<figure><img src="ch5_img/page13.png" alt="슬라이드 13"><figcaption>슬라이드 13 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 14</span>
+<p>JSTL(Jakarta Standart Tag Library) 설치 - Maven Repository : https://mvnrepository.com/</p>
+<figure><img src="ch5_img/page14.png" alt="슬라이드 14"><figcaption>슬라이드 14 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 15</span><h2 class="title">Maven(메이븐)</h2>
+<p>Maven 이란?</p>
+<ul><li>복잡한 프로젝트의 소스를 체계적으로 컴파일하고 관련 라이브러리의 버전 이나 종속성 관리를 쉽게 도와주는 tool(도구)이다.</li><li>2004년 아파치 프로젝트로 Maven(메이븐)이 출시되어 다수가 사용하는 자 바 빌드 도구가 되었으며 특히 스프링 프레임워크 개발에서 기본 빌드 도구 로 활용되고 있다.</li><li>2012년 Gradle(그래이들)이 출시되어 안드로이드 앱 개발의 기본 빌드 도구 가 되었고, 스프링 프레임워크에서도 사용되고 있다.</li></ul>
+</section><section><span class="ch-num">슬라이드 16</span><h2 class="title">Maven 기반 프로젝트</h2>
+<p>프로젝트 &gt; 우클릭 &gt; configure &gt; Convert to Maven Project pom.xml 생성됨</p>
+<figure><img src="ch5_img/page16.png" alt="슬라이드 16"><figcaption>슬라이드 16 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 17</span>
+<p>1. pox.xml 에 &lt;dependencies&gt; 의존성 관리 (2개 추가) 2. 프로젝트 &gt; 우클릭 &gt; Maven &gt; update project</p>
+<figure><img src="ch5_img/page17.png" alt="슬라이드 17"><figcaption>슬라이드 17 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 18</span><h2 class="title">JSTL(JSP 표준태그 라이브러리)</h2>
+<h4>Core 태그의 종류</h4>
+<figure><img src="ch5_img/page18.png" alt="슬라이드 18"><figcaption>슬라이드 18 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 19</span>
+<h4>JSTL 태그 사용하기</h4>
+<figure><img src="ch5_img/page19.png" alt="슬라이드 19"><figcaption>슬라이드 19 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 20</span>
+<h4>JTSL 실습 예제</h4>
+<figure><img src="ch5_img/page20.png" alt="슬라이드 20"><figcaption>슬라이드 20 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 21</span>
+<h4>JTSL 실습 예제</h4>
+<figure><img src="ch5_img/page21.png" alt="슬라이드 21"><figcaption>슬라이드 21 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 22</span>
+<h4>JTSL 실습 예제</h4>
+<figure><img src="ch5_img/page22.png" alt="슬라이드 22"><figcaption>슬라이드 22 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 23</span>
+<h4>짝수/홀수 판정</h4>
+<figure><img src="ch5_img/page23.png" alt="슬라이드 23"><figcaption>슬라이드 23 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 24</span>
+<h4>짝수/홀수 판정</h4>
+<figure><img src="ch5_img/page24.png" alt="슬라이드 24"><figcaption>슬라이드 24 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 25</span>
+<h4>학점 계산</h4>
+<figure><img src="ch5_img/page25.png" alt="슬라이드 25"><figcaption>슬라이드 25 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 26</span>
+<p>scoreForm.jsp</p>
+<h4>학점 계산 - 사용자 입력 폼</h4>
+<figure><img src="ch5_img/page26.png" alt="슬라이드 26"><figcaption>슬라이드 26 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 27</span>
+<p>scorePoint.jsp</p>
+<h4>학점 계산 - 사용자 입력 폼</h4>
+<figure><img src="ch5_img/page27.png" alt="슬라이드 27"><figcaption>슬라이드 27 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 28</span>
+<h4>학점 계산 – 유효성 검사(validation)</h4>
+<figure><img src="ch5_img/page28.png" alt="슬라이드 28"><figcaption>슬라이드 28 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 29</span>
+<h4>반복문</h4>
+<p>&lt;c:forEach var=변수이름”  items=“반복할 객체이름” begin=“시작값&quot; end=＂마지막값“  step=“증가값”&gt; &lt;/c:forEach&gt; forEach.jsp</p>
+<figure><img src="ch5_img/page29.png" alt="슬라이드 29"><figcaption>슬라이드 29 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 30</span>
+<h4>반복문</h4>
+<figure><img src="ch5_img/page30.png" alt="슬라이드 30"><figcaption>슬라이드 30 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 31</span>
+<h4>반복문</h4>
+<p>gugudan.jsp</p>
+<figure><img src="ch5_img/page31.png" alt="슬라이드 31"><figcaption>슬라이드 31 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 32</span><h2 class="title">fmt 태그를 이용한 날짜/시간 표기</h2>
+<p>formatDate 태그- 날짜 정보를 담고 있는 객체를 형식화하여 출력함 &lt;%@  taglib uri=“jakarta.tags.fmt” %  prefix=“fmt” &gt;</p>
+<figure><img src="ch5_img/page32.png" alt="슬라이드 32"><figcaption>슬라이드 32 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 33</span>
+<p>formatDate 태그 formatDate.jsp</p>
+<figure><img src="ch5_img/page33.png" alt="슬라이드 33"><figcaption>슬라이드 33 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 34</span>
+<p>formatDate 태그</p>
+<figure><img src="ch5_img/page34.png" alt="슬라이드 34"><figcaption>슬라이드 34 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 35</span><h2 class="title">fmt 태그를 이용한 숫자 표기</h2>
+<p>formatNumber 태그 사용자의 로케일(Locale)에 따라 숫자를 다양한 형식으로 출력함</p>
+<figure><img src="ch5_img/page35.png" alt="슬라이드 35"><figcaption>슬라이드 35 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 36</span>
+<p>formatNumber 태그 formatNumber.jsp</p>
+<figure><img src="ch5_img/page36.png" alt="슬라이드 36"><figcaption>슬라이드 36 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 37</span>
+<p>formatNumber 태그 formatNumber.jsp</p>
+<figure><img src="ch5_img/page37.png" alt="슬라이드 37"><figcaption>슬라이드 37 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 38</span><h2 class="title">다국어 처리</h2>
+<h4>JSTL의 fmt 태그를 이용하면 언어별로 페이지를 따로 만들 필요 없이 아주 간단하게</h4>
+<p>다국어를 지원할 수 있다.</p>
+<h4>지역화는 사용 국가별 환경에서 특정 언어와 지역에 맞게 적합화 하는 것으로 L10n</h4>
+<p>으로 표기</p>
+<ul><li>숫자, 날짜, 시간의 형식</li><li>화폐의 표시</li><li>키보드의 지원등</li></ul>
+<h4>국제화는 여러 국가에서 사용할 수 있도록 다국어를 지원하는 것으로 i18n으로 표기</h4>
+<ul><li>유니코드의 사용이나 기존의 인코딩을 적절히 처리해야 한다.</li><li>날짜와 시간 표시, 지역의 달력, 숫자 표시등 사용자 설정을 지원해야 한다. ❖다국어 처리</li></ul>
+</section><section><span class="ch-num">슬라이드 39</span><h2 class="title">fmt 태그를 이용한 다국어 처리</h2>
+<figure><img src="ch5_img/page39.png" alt="슬라이드 39"><figcaption>슬라이드 39 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 40</span>
+<figure><img src="ch5_img/page40.png" alt="슬라이드 40"><figcaption>슬라이드 40 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 41</span>
+<p>src 하위에 com.bundle 패키지 생성 &gt; properties 파일 만들기 message_ko.properties message.txt ▪사용자의 로케일에 따라 리소스 번들의 메시지 출력 실습 message_en.properties</p>
+<figure><img src="ch5_img/page41.png" alt="슬라이드 41"><figcaption>슬라이드 41 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 42</span>
+<p>language01.jsp ▪사용자의 로케일에 따라 리소스 번들의 메시지 출력 실습</p>
+<figure><img src="ch5_img/page42.png" alt="슬라이드 42"><figcaption>슬라이드 42 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 43</span>
+<p>한국어, 영어로 출력하기</p>
+<figure><img src="ch5_img/page43.png" alt="슬라이드 43"><figcaption>슬라이드 43 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 44</span>
+<p>한국어, 영어로 출력하기 language02.jsp</p>
+<figure><img src="ch5_img/page44.png" alt="슬라이드 44"><figcaption>슬라이드 44 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 45</span>
+<p>실습 문제 loginForm.jsp</p>
+<figure><img src="ch5_img/page45.png" alt="슬라이드 45"><figcaption>슬라이드 45 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 46</span><h2 class="title">MVC란?</h2>
+<p>⚫MVC란?</p>
+<ul><li>Model, View, Controller의 약자로 웹 애플리케이션을 비즈니스 로직, 프레 젠테이션 로직, 데이터로 분리하는 디자인 패턴이다.</li><li>클라이언트의 요청 처리, 응답 처리, 로직 처리 부분을 모듈화한 구조이다. 데이터베이스 클라이언트 컨트롤러 뷰 모델 웹서버 요청 응답</li></ul>
+</section><section><span class="ch-num">슬라이드 47</span><h2 class="title">⚫MVC 구성 요소와 기능</h2>
+<figure><img src="ch5_img/page47.png" alt="슬라이드 47"><figcaption>슬라이드 47 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 48</span><h2 class="title">MVC 실습</h2>
+<p>⚫MVC 실습</p>
+<figure><img src="ch5_img/page48.png" alt="슬라이드 48"><figcaption>슬라이드 48 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 49</span>
+<p>⚫컨트롤러(서블릿) – 모델을 만들어 뷰에 보내줌</p>
+<figure><img src="ch5_img/page49.png" alt="슬라이드 49"><figcaption>슬라이드 49 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 50</span>
+<p>⚫컨트롤러(서블릿) – 모델을 만들어 뷰에 보내줌</p>
+<figure><img src="ch5_img/page50.png" alt="슬라이드 50"><figcaption>슬라이드 50 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 51</span>
+<p>⚫뷰(mvc01.jsp) /model/mvc01.jsp</p>
+<figure><img src="ch5_img/page51.png" alt="슬라이드 51"><figcaption>슬라이드 51 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 52</span>
+<h4>상품 출력 프로그램</h4>
+<figure><img src="ch5_img/page52.png" alt="슬라이드 52"><figcaption>슬라이드 52 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 53</span>
+<h4>상품 출력 프로그램</h4>
+<figure><img src="ch5_img/page53.png" alt="슬라이드 53"><figcaption>슬라이드 53 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 54</span>
+<h4>상품 출력 프로그램</h4>
+<figure><img src="ch5_img/page54.png" alt="슬라이드 54"><figcaption>슬라이드 54 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 55</span>
+<p>productServlet.java</p>
+<h4>상품 출력 프로그램</h4>
+<figure><img src="ch5_img/page55.png" alt="슬라이드 55"><figcaption>슬라이드 55 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 56</span>
+<p>selProduct.jsp</p>
+<h4>상품 출력 프로그램</h4>
+<figure><img src="ch5_img/page56.png" alt="슬라이드 56"><figcaption>슬라이드 56 — 코드·실행 화면</figcaption></figure>
+</section>
+</main>
+<footer>5장. EL과 JSTL · JAVA 웹 &amp; JSP 강의 교안</footer>
+</div></body></html>

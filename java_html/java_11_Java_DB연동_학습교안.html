@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11장. Java – MySQL DB 연동 — 학습 교안</title>
+<style>
+  :root{--bg:#f4f6f9;--card:#fff;--ink:#1f2933;--muted:#52606d;--line:#e4e7eb;--accent:#e76f00;--accent2:#2c3e50;--code-bg:#282c34;--goal:#eafaf1;--goal-line:#27ae60;--ex:#eef4ff;--ex-line:#5b8def;--lab:#fff5e9;--lab-line:#e76f00;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Malgun Gothic","맑은 고딕",-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.75;}
+  header.hero{background:linear-gradient(135deg,#5382a1,#2c3e50);color:#fff;padding:52px 24px;text-align:center;}
+  header.hero .eyebrow{letter-spacing:3px;font-size:.78rem;opacity:.9;text-transform:uppercase}
+  header.hero h1{margin:12px 0 8px;font-size:1.9rem}header.hero p{margin:0;opacity:.92}
+  header.hero .tags{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  header.hero .tags span{background:rgba(255,255,255,.16);border-radius:999px;padding:5px 13px;font-size:.82rem}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 80px}
+  nav.toc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin-bottom:34px;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+  nav.toc h2{margin:0 0 12px;font-size:1.05rem;color:var(--accent2)}
+  nav.toc ol{margin:0;padding-left:22px;columns:2;column-gap:34px}
+  nav.toc a{color:var(--ink);text-decoration:none}nav.toc a:hover{color:var(--accent);text-decoration:underline}
+  section.module{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 30px;margin-bottom:26px;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+  section.module > h2{margin:0 0 6px;font-size:1.4rem;color:var(--accent2);display:flex;align-items:center;gap:12px;}
+  section.module > h2 .num{background:var(--accent);color:#fff;font-size:.95rem;font-weight:800;padding:4px 12px;border-radius:10px;min-width:38px;text-align:center;}
+  h3.blk{font-size:1.02rem;margin:22px 0 8px;font-weight:800}
+  .goal{background:var(--goal);border-left:5px solid var(--goal-line);border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0}
+  .goal .lbl{font-weight:800;color:#1e874b}.goal ul{margin:8px 0 0}
+  .concept h3.blk{color:var(--ink);border-left:4px solid var(--accent);padding-left:10px}
+  .ex{background:var(--ex);border-left:5px solid var(--ex-line);border-radius:0 10px 10px 0;padding:14px 20px;margin:16px 0}
+  .ex .lbl{font-weight:800;color:#2f5fc7}
+  .lab{background:var(--lab);border-left:5px solid var(--lab-line);border-radius:0 10px 10px 0;padding:14px 20px;margin:16px 0}
+  .lab .lbl{font-weight:800;color:#c85f00}.lab h4{margin:6px 0 6px;font-size:.98rem}
+  ul{margin:8px 0}li{margin:5px 0}.muted{color:var(--muted)}
+  code{background:#eceef1;padding:2px 6px;border-radius:5px;font-size:.92em;font-family:Consolas,"D2Coding",monospace}
+  pre{background:var(--code-bg);color:#abb2bf;border-radius:10px;padding:16px 18px;overflow-x:auto;font-family:Consolas,"D2Coding",monospace;font-size:.9rem;line-height:1.6;margin:10px 0}
+  pre .k{color:#c678dd}pre .t{color:#e5c07b}pre .s{color:#98c379}pre .c{color:#7f848e;font-style:italic}pre .f{color:#61afef}pre .n{color:#d19a66}
+  .out{background:#1b1e24;color:#9fd18a;border-radius:8px;padding:10px 14px;font-family:Consolas,"D2Coding",monospace;font-size:.86rem;margin:6px 0 0}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.93rem}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:#f0f4f8;color:var(--accent2)}td.c,th.c{text-align:center}
+  details{margin-top:10px;background:#fff;border:1px solid #f0d9bf;border-radius:8px;padding:8px 14px}
+  details summary{cursor:pointer;font-weight:700;color:#c85f00}details pre{margin-top:10px}
+  footer{text-align:center;color:var(--muted);font-size:.85rem;padding:30px 20px}
+  .pill{display:inline-block;background:#eceef1;border-radius:6px;padding:2px 9px;margin:2px;font-size:.85rem}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="eyebrow">Java 프로그래밍 · Chapter 11 · 학습 교안</div>
+  <h1>Java – MySQL DB 연동</h1>
+  <p>JDBC로 데이터베이스에 연결하고 CRUD 구현하기</p>
+  <div class="tags"><span>🔌 JDBC</span><span>🗄 SQL</span><span>📦 DTO·DAO</span><span>✍️ 실습문제(정답 포함)</span></div>
+</header>
+<div class="wrap">
+  <nav class="toc">
+    <h2>📚 학습 목차</h2>
+    <ol>
+      <li><a href="#m1">JDBC와 DB 연결</a></li>
+      <li><a href="#m2">SQL 기초 (DDL·DML·DCL)</a></li>
+      <li><a href="#m3">DB 연결 순서 · Connector/J</a></li>
+      <li><a href="#m4">DTO와 DAO</a></li>
+      <li><a href="#m5">PreparedStatement</a></li>
+      <li><a href="#m6">회원 관리 CRUD</a></li>
+    </ol>
+  </nav>
+
+  <section class="module" id="m1">
+    <h2><span class="num">1</span> JDBC와 DB 연결</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>JDBC의 역할을 설명할 수 있다.</li>
+      <li>MySQL 설치와 계정·DB 구성 흐름을 이해한다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 개념 및 설명</h3>
+      <p><b>JDBC(Java Database Connectivity)</b>는 자바 애플리케이션을 DBMS에 연결해 주는 API입니다. 각 DBMS 제조사(오라클·MySQL 등)가 <b>드라이버</b>를 제공합니다. MySQL 설치 후 계정(예: <code>javauser</code>)과 데이터베이스(예: <code>javadb</code>)를 만들어 사용합니다.</p>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 11-1. JDBC 개념</h4>
+      <p>자바에서 MySQL·오라클 같은 DBMS에 연결할 수 있게 해 주는 것은 무엇인가요?</p>
+      <details><summary>정답 보기</summary>
+        <p class="muted">JDBC(및 각 DBMS의 드라이버)</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="module" id="m2">
+    <h2><span class="num">2</span> SQL 기초 (DDL · DML · DCL)</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>SQL의 세 갈래(DDL·DML·DCL)를 구분할 수 있다.</li>
+      <li>기본 CRUD SQL문을 작성할 수 있다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 개념 및 설명</h3>
+      <table>
+        <tr><th>구분</th><th>역할</th><th>명령어</th></tr>
+        <tr><td>DDL (정의어)</td><td>테이블 구조 생성·변경·삭제</td><td>CREATE, ALTER, DROP</td></tr>
+        <tr><td>DML (조작어)</td><td>데이터 저장·조회·수정·삭제</td><td>INSERT, SELECT, UPDATE, DELETE</td></tr>
+        <tr><td>DCL (제어어)</td><td>권한 관리</td><td>GRANT, REVOKE</td></tr>
+      </table>
+    </div>
+    <div class="ex"><div class="lbl">💡 예제</div>
+<pre><span class="k">INSERT INTO</span> users(user_id, name) <span class="k">VALUES</span> (<span class="s">'hong'</span>, <span class="s">'홍길동'</span>);
+<span class="k">SELECT</span> * <span class="k">FROM</span> users <span class="k">WHERE</span> id = <span class="n">1</span>;
+<span class="k">UPDATE</span> users <span class="k">SET</span> name = <span class="s">'김철수'</span> <span class="k">WHERE</span> id = <span class="n">1</span>;
+<span class="k">DELETE FROM</span> users <span class="k">WHERE</span> id = <span class="n">1</span>;</pre>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 11-2. SQL 분류</h4>
+      <p><code>CREATE TABLE</code>, <code>SELECT</code>, <code>GRANT</code>는 각각 DDL·DML·DCL 중 무엇인가요?</p>
+      <details><summary>정답 보기</summary>
+        <p class="muted">CREATE TABLE → DDL, SELECT → DML, GRANT → DCL</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="module" id="m3">
+    <h2><span class="num">3</span> DB 연결 순서 · Connector/J</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>JDBC 연결 4단계를 순서대로 설명할 수 있다.</li>
+      <li>드라이버(jar)를 프로젝트에 추가하는 과정을 이해한다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 개념 및 설명</h3>
+      <table>
+        <tr><th>단계</th><th>설명</th></tr>
+        <tr><td>① 드라이버 로딩</td><td><code>Class.forName("com.mysql.cj.jdbc.Driver")</code></td></tr>
+        <tr><td>② 연결</td><td><code>DriverManager.getConnection(url, user, pw)</code></td></tr>
+        <tr><td>③ SQL 실행</td><td>Statement / PreparedStatement</td></tr>
+        <tr><td>④ 연결 해제</td><td><code>close()</code></td></tr>
+      </table>
+      <p class="muted">MySQL Connector/J(.jar)를 <code>lib</code> 폴더에 넣고 Build Path에 추가해야 합니다.</p>
+    </div>
+    <div class="ex"><div class="lbl">💡 예제</div>
+<pre><span class="t">String</span> url = <span class="s">"jdbc:mysql://localhost:3306/javadb"</span>;
+<span class="t">Connection</span> conn = <span class="t">DriverManager</span>.<span class="f">getConnection</span>(
+    url, <span class="s">"javauser"</span>, <span class="s">"pwjava"</span>);</pre>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 11-3. 연결 순서</h4>
+      <p>JDBC로 DB 작업을 할 때 가장 먼저 하는 일과 가장 마지막에 하는 일은?</p>
+      <details><summary>정답 보기</summary>
+        <p class="muted">처음: 드라이버 로딩 → 마지막: 연결 해제(close)</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="module" id="m4">
+    <h2><span class="num">4</span> DTO와 DAO</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>DTO와 DAO의 역할을 구분할 수 있다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 개념 및 설명</h3>
+      <ul>
+        <li><b>DTO(Data Transfer Object)</b>: 데이터를 담아 전달하는 객체. 테이블 필드를 속성으로, getter/setter만 가짐(로직 없음)</li>
+        <li><b>DAO(Data Access Object)</b>: DB에 연결해 CRUD 작업을 수행하는 클래스. DTO를 사용</li>
+      </ul>
+    </div>
+    <div class="ex"><div class="lbl">💡 예제</div>
+<pre><span class="k">public class</span> <span class="t">Users</span> {   <span class="c">// DTO</span>
+    <span class="k">private</span> <span class="t">Integer</span> id;
+    <span class="k">private</span> <span class="t">String</span> userId, password, name;
+    <span class="c">// getter / setter ...</span>
+}</pre>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 11-4. 역할 구분</h4>
+      <p>DB에 실제로 연결해 회원을 저장·조회하는 코드는 DTO와 DAO 중 어디에 두나요?</p>
+      <details><summary>정답 보기</summary>
+        <p class="muted">DAO(Data Access Object)에 둔다. DTO는 데이터만 담는다.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="module" id="m5">
+    <h2><span class="num">5</span> PreparedStatement</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li><code>executeUpdate()</code>와 <code>executeQuery()</code>를 구분해 쓸 수 있다.</li>
+      <li><code>?</code> 파라미터로 안전하게 값을 바인딩할 수 있다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 개념 및 설명</h3>
+      <p><code>PreparedStatement</code>는 <code>?</code> 자리에 값을 채워 SQL을 실행합니다. <b>INSERT·UPDATE·DELETE</b>는 <code>executeUpdate()</code>, <b>SELECT</b>는 <code>executeQuery()</code>로 <code>ResultSet</code>을 받습니다. SQL 인젝션 방지에도 유리합니다.</p>
+    </div>
+    <div class="ex"><div class="lbl">💡 예제</div>
+<pre><span class="t">String</span> sql = <span class="s">"INSERT INTO users(user_id, name) VALUES(?, ?)"</span>;
+<span class="t">PreparedStatement</span> pstmt = conn.<span class="f">prepareStatement</span>(sql);
+pstmt.<span class="f">setString</span>(<span class="n">1</span>, <span class="s">"hong"</span>);
+pstmt.<span class="f">setString</span>(<span class="n">2</span>, <span class="s">"홍길동"</span>);
+pstmt.<span class="f">executeUpdate</span>();</pre>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 11-5. 실행 메서드 선택</h4>
+      <p>회원 목록을 조회(SELECT)할 때 사용하는 메서드와, 반환되는 객체는?</p>
+      <details><summary>정답 보기</summary>
+        <p class="muted"><code>executeQuery()</code>를 사용하고 <code>ResultSet</code>을 반환받는다.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="module" id="m6">
+    <h2><span class="num">6</span> 회원 관리 CRUD</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>DAO 메서드로 생성·목록·상세·수정·삭제를 구현할 수 있다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 개념 및 설명</h3>
+      <table>
+        <tr><th>기능</th><th>SQL</th><th>DAO 메서드</th></tr>
+        <tr><td>생성</td><td>INSERT</td><td><code>addUser()</code></td></tr>
+        <tr><td>목록</td><td>SELECT</td><td><code>getUserList()</code></td></tr>
+        <tr><td>상세</td><td>SELECT … WHERE id</td><td><code>getUser(id)</code></td></tr>
+        <tr><td>수정</td><td>UPDATE</td><td><code>updateUser()</code></td></tr>
+        <tr><td>삭제</td><td>DELETE</td><td><code>deleteUser(id)</code></td></tr>
+      </table>
+    </div>
+    <div class="ex"><div class="lbl">💡 예제</div>
+<pre><span class="c">// 목록 조회</span>
+<span class="t">ResultSet</span> rs = pstmt.<span class="f">executeQuery</span>();
+<span class="k">while</span> (rs.<span class="f">next</span>()) {
+    <span class="t">System</span>.out.<span class="f">println</span>(rs.<span class="f">getString</span>(<span class="s">"name"</span>));
+}</pre>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 11-6. CRUD 매핑</h4>
+      <p>회원을 삭제하는 기능은 어떤 SQL과 실행 메서드를 사용하나요?</p>
+      <details><summary>정답 보기</summary>
+        <p class="muted"><code>DELETE</code> 문을 <code>executeUpdate()</code>로 실행한다.</p>
+      </details>
+    </div>
+  </section>
+
+  <footer>11장. Java – MySQL DB 연동 · 학습 교안<br>모듈별 학습목표 · 개념 · 예제 · 실습문제 구성</footer>
+</div>
+</body>
+</html>

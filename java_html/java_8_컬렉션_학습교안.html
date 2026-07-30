@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8장. 컬렉션(List, Set, Map) — 학습 교안</title>
+<style>
+  :root{--bg:#f4f6f9;--card:#fff;--ink:#1f2933;--muted:#52606d;--line:#e4e7eb;--accent:#e76f00;--accent2:#2c3e50;--code-bg:#282c34;--goal:#eafaf1;--goal-line:#27ae60;--ex:#eef4ff;--ex-line:#5b8def;--lab:#fff5e9;--lab-line:#e76f00;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Malgun Gothic","맑은 고딕",-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.75;}
+  header.hero{background:linear-gradient(135deg,#5382a1,#2c3e50);color:#fff;padding:52px 24px;text-align:center;}
+  header.hero .eyebrow{letter-spacing:3px;font-size:.78rem;opacity:.9;text-transform:uppercase}
+  header.hero h1{margin:12px 0 8px;font-size:1.9rem}header.hero p{margin:0;opacity:.92}
+  header.hero .tags{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  header.hero .tags span{background:rgba(255,255,255,.16);border-radius:999px;padding:5px 13px;font-size:.82rem}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 80px}
+  nav.toc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin-bottom:34px;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+  nav.toc h2{margin:0 0 12px;font-size:1.05rem;color:var(--accent2)}
+  nav.toc ol{margin:0;padding-left:22px;columns:2;column-gap:34px}
+  nav.toc a{color:var(--ink);text-decoration:none}nav.toc a:hover{color:var(--accent);text-decoration:underline}
+  section.module{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 30px;margin-bottom:26px;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+  section.module > h2{margin:0 0 6px;font-size:1.4rem;color:var(--accent2);display:flex;align-items:center;gap:12px;}
+  section.module > h2 .num{background:var(--accent);color:#fff;font-size:.95rem;font-weight:800;padding:4px 12px;border-radius:10px;min-width:38px;text-align:center;}
+  h3.blk{font-size:1.02rem;margin:22px 0 8px;font-weight:800}
+  .goal{background:var(--goal);border-left:5px solid var(--goal-line);border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0}
+  .goal .lbl{font-weight:800;color:#1e874b}.goal ul{margin:8px 0 0}
+  .concept h3.blk{color:var(--ink);border-left:4px solid var(--accent);padding-left:10px}
+  .ex{background:var(--ex);border-left:5px solid var(--ex-line);border-radius:0 10px 10px 0;padding:14px 20px;margin:16px 0}
+  .ex .lbl{font-weight:800;color:#2f5fc7}
+  .lab{background:var(--lab);border-left:5px solid var(--lab-line);border-radius:0 10px 10px 0;padding:14px 20px;margin:16px 0}
+  .lab .lbl{font-weight:800;color:#c85f00}.lab h4{margin:6px 0 6px;font-size:.98rem}
+  ul{margin:8px 0}li{margin:5px 0}.muted{color:var(--muted)}
+  code{background:#eceef1;padding:2px 6px;border-radius:5px;font-size:.92em;font-family:Consolas,"D2Coding",monospace}
+  pre{background:var(--code-bg);color:#abb2bf;border-radius:10px;padding:16px 18px;overflow-x:auto;font-family:Consolas,"D2Coding",monospace;font-size:.9rem;line-height:1.6;margin:10px 0}
+  pre .k{color:#c678dd}pre .t{color:#e5c07b}pre .s{color:#98c379}pre .c{color:#7f848e;font-style:italic}pre .f{color:#61afef}pre .n{color:#d19a66}
+  .out{background:#1b1e24;color:#9fd18a;border-radius:8px;padding:10px 14px;font-family:Consolas,"D2Coding",monospace;font-size:.86rem;margin:6px 0 0}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.93rem}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:#f0f4f8;color:var(--accent2)}td.c,th.c{text-align:center}
+  details{margin-top:10px;background:#fff;border:1px solid #f0d9bf;border-radius:8px;padding:8px 14px}
+  details summary{cursor:pointer;font-weight:700;color:#c85f00}details pre{margin-top:10px}
+  footer{text-align:center;color:var(--muted);font-size:.85rem;padding:30px 20px}
+  .pill{display:inline-block;background:#eceef1;border-radius:6px;padding:2px 9px;margin:2px;font-size:.85rem}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="eyebrow">Java 프로그래밍 · Chapter 08 · 학습 교안</div>
+  <h1>컬렉션 (List, Set, Map)</h1>
+  <p>데이터를 자유롭게 담고 꺼내는 자료구조 라이브러리</p>
+  <div class="tags"><span>📚 List</span><span>🎯 Set</span><span>🗺 Map</span><span>📥 Stack·Queue</span><span>✍️ 실습문제(정답 포함)</span></div>
+</header>
+<div class="wrap">
+  <nav class="toc">
+    <h2>📚 학습 목차</h2>
+    <ol>
+      <li><a href="#m1">제네릭(Generic)</a></li>
+      <li><a href="#m2">컬렉션 개요</a></li>
+      <li><a href="#m3">List (ArrayList)</a></li>
+      <li><a href="#m4">Set (HashSet) · Iterator</a></li>
+      <li><a href="#m5">Map (HashMap)</a></li>
+      <li><a href="#m6">Stack과 Queue</a></li>
+      <li><a href="#m7">미니 프로젝트 · 은행 거래</a></li>
+    </ol>
+  </nav>
+
+  <section class="module" id="m1">
+    <h2><span class="num">1</span> 제네릭(Generic)</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>제네릭 프로그래밍의 목적을 설명할 수 있다.</li>
+      <li>타입 파라미터 <code>&lt;T&gt;</code>를 사용해 제네릭 클래스를 정의할 수 있다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 개념 및 설명</h3>
+      <p><b>제네릭 프로그래밍</b>은 어떤 값이 하나의 자료형이 아닌 <b>여러 자료형을 사용할 수 있도록</b> 프로그래밍하는 것입니다.</p>
+      <ul>
+        <li>Java 5부터 <b>제네릭(Generic) 타입</b>이 추가되어, 잘못된 타입이 사용될 수 있는 문제를 <b>컴파일 과정에서 제거</b>할 수 있게 되었습니다.</li>
+        <li>비제네릭 코드는 불필요한 <b>타입 변환</b>을 하므로 프로그램 성능에 악영향을 줍니다.</li>
+        <li>컬렉션 프레임워크(자료구조)도 많은 부분이 제네릭으로 구현되어 있습니다.</li>
+      </ul>
+<pre><span class="k">public class</span> 클래스명&lt;<span class="t">T</span>&gt; { .... }   <span class="c">// T 자리에 실제 타입 지정</span></pre>
+    </div>
+    <div class="ex"><div class="lbl">💡 예제 — ① 제네릭 타입 정의 (Box&lt;T&gt;)</div>
+      <p class="muted" style="margin:0 0 8px">제네릭 타입은 <b>타입(type)을 파라미터</b>로 가지는 클래스다. <code>&lt;T&gt;</code>의 <code>T</code> 자리에 사용할 때 실제 자료형을 지정한다.</p>
+<pre><span class="k">package</span> generic.box;
+
+<span class="k">public class</span> <span class="t">Box</span>&lt;<span class="t">T</span>&gt; {
+    <span class="c">// T는 자료형, type은 멤버 변수</span>
+    <span class="k">private</span> <span class="t">T</span> type;
+
+    <span class="k">public</span> <span class="k">void</span> <span class="f">set</span>(<span class="t">T</span> type) {
+        <span class="k">this</span>.type = type;
+    }
+
+    <span class="k">public</span> <span class="t">T</span> <span class="f">get</span>() {
+        <span class="k">return</span> type;
+    }
+}</pre>
+    </div>
+    <div class="ex"><div class="lbl">💡 예제 — ② 사용자 정의 자료형 (Car)</div>
+<pre><span class="k">public class</span> <span class="t">Car</span> {
+    <span class="t">String</span> name;
+
+    <span class="t">Car</span>(<span class="t">String</span> name) {
+        <span class="k">this</span>.name = name;
+    }
+
+    <span class="t">@Override</span>
+    <span class="k">public</span> <span class="t">String</span> <span class="f">toString</span>() {
+        <span class="k">return</span> name;
+    }
+}</pre>
+    </div>
+    <div class="ex"><div class="lbl">💡 예제 — ③ BoxTest (여러 타입에 재사용)</div>
+<pre><span class="k">public class</span> <span class="t">BoxTest</span> {
+    <span class="k">public static</span> <span class="k">void</span> <span class="f">main</span>(<span class="t">String</span>[] args) {
+        <span class="c">// String 형 - 기본 자료형</span>
+        <span class="t">Box</span>&lt;<span class="t">String</span>&gt; box1 = <span class="k">new</span> <span class="t">Box</span>&lt;&gt;();
+        box1.<span class="f">set</span>(<span class="s">"행운을 빌어요"</span>);
+        <span class="t">String</span> msg = box1.<span class="f">get</span>();
+        <span class="t">System</span>.out.<span class="f">println</span>(msg);
+
+        <span class="c">// Integer 형</span>
+        <span class="t">Box</span>&lt;<span class="t">Integer</span>&gt; box2 = <span class="k">new</span> <span class="t">Box</span>&lt;&gt;();
+        box2.<span class="f">set</span>(<span class="n">10</span>);
+        <span class="t">Integer</span> num = box2.<span class="f">get</span>();
+        <span class="t">System</span>.out.<span class="f">println</span>(num);
+
+        <span class="c">// Car 타입 - 사용자 정의 자료형</span>
+        <span class="t">Box</span>&lt;<span class="t">Car</span>&gt; box3 = <span class="k">new</span> <span class="t">Box</span>&lt;&gt;();
+        box3.<span class="f">set</span>(<span class="k">new</span> <span class="t">Car</span>(<span class="s">"아이오닉6"</span>));
+        <span class="t">Car</span> car = box3.<span class="f">get</span>();
+        <span class="t">System</span>.out.<span class="f">println</span>(car);
+    }
+}</pre>
+      <div class="out">행운을 빌어요<br>10<br>아이오닉6</div>
+      <p class="muted" style="margin-top:8px">같은 <code>Box</code> 클래스를 <code>String</code>·<code>Integer</code>·<code>Car</code> 등 <b>어떤 타입에도 재사용</b>할 수 있고, 잘못된 타입은 <b>컴파일 단계에서</b> 걸러진다. 형변환도 필요 없다.</p>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 8-1. 제네릭 클래스</h4>
+      <p>제네릭을 쓰면 좋은 점 두 가지를 쓰고, 정수를 담는 <code>Box</code>를 만드는 코드를 한 줄로 작성하세요.</p>
+      <details><summary>정답 보기</summary>
+        <p class="muted">① 잘못된 타입을 컴파일 단계에서 막는다. ② 불필요한 형변환이 없어 성능·안정성이 좋다.<br>
+        <code>Box&lt;Integer&gt; box = new Box&lt;&gt;();</code></p>
+      </details>
+    </div>
+  </section>
+
+  <section class="module" id="m2">
+    <h2><span class="num">2</span> 컬렉션 개요</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>컬렉션 프레임워크의 개념과 사용 이유를 설명할 수 있다.</li>
+      <li>Collection 계층(List·Set·Map)을 구분할 수 있다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 개념 및 설명</h3>
+      <ul>
+        <li><b>컬렉션 프레임워크</b>는 프로그램 구현에 필요한 <b>자료구조(Data Structure)</b>를 구현해 놓은 라이브러리다.</li>
+        <li>프로그램 실행 중 <b>메모리에 자료를 유지·관리</b>하기 위해 사용한다.</li>
+        <li><code>java.util</code> 패키지에 구현되어 있다.</li>
+        <li>개발 시간을 절약하면서 <b>최적화된 알고리즘</b>을 사용할 수 있다.</li>
+      </ul>
+      <p><b>Collection 인터페이스</b>는 하나의 객체를 관리하기 위한 메서드가 선언된 인터페이스로, 하위에 <b>List</b>와 <b>Set</b> 인터페이스가 있다. (<code>Map</code>은 Collection과 별도 계층)</p>
+      <table>
+        <tr><th>분류</th><th>특징</th><th>구현 클래스</th></tr>
+        <tr><td>List</td><td>순서 유지, 중복 허용</td><td>ArrayList, Vector, LinkedList</td></tr>
+        <tr><td>Set</td><td>순서 없음, 중복 불가</td><td>HashSet, TreeSet</td></tr>
+        <tr><td>Map</td><td>키-값 쌍, 키 중복 불가</td><td>HashMap, Hashtable, TreeMap</td></tr>
+      </table>
+      <figure style="margin:16px 0;text-align:center;display:flex;flex-direction:column;align-items:center">
+        <svg id="c8d1" style="width:100%;max-width:720px;height:auto;display:block;margin:0 auto" viewBox="0 0 780 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="컬렉션 프레임워크 계층 다이어그램">
+          <style>
+            #c8d1 .cls{fill:#fff;stroke:#5aa8c7;stroke-width:1.5}
+            #c8d1 .top{fill:#fdece0;stroke:#e0955a;stroke-width:1.5}
+            #c8d1 .li{fill:#e8f0dc;stroke:#8aac5a;stroke-width:1.5}
+            #c8d1 .se{fill:#dce8f5;stroke:#5a8ac0;stroke-width:1.5}
+            #c8d1 .mp{fill:#eceef1;stroke:#9aa5b1;stroke-width:1.5}
+            #c8d1 .nm{font-family:"Malgun Gothic","맑은 고딕",sans-serif;font-size:14px;fill:#1f2933;text-anchor:middle}
+            #c8d1 .gen{stroke:#5aa8c7;stroke-width:1.4;fill:none}
+            #c8d1 .imp{stroke:#8aa0b5;stroke-width:1.2;fill:none;stroke-dasharray:3 3}
+            #c8d1 .tri{fill:#fff;stroke:#5aa8c7;stroke-width:1.4}
+          </style>
+          <!-- Collection -->
+          <rect class="top" x="150" y="12" width="150" height="42" rx="4"/>
+          <text class="nm" x="225" y="38">Collection</text>
+          <!-- List / Set -->
+          <rect class="li" x="55" y="104" width="130" height="40" rx="4"/>
+          <text class="nm" x="120" y="129">List</text>
+          <rect class="se" x="270" y="104" width="130" height="40" rx="4"/>
+          <text class="nm" x="335" y="129">Set</text>
+          <!-- Collection -> List/Set (extends, hollow triangle up) -->
+          <polygon class="tri" points="225,56 217,72 233,72"/>
+          <line class="gen" x1="225" y1="72" x2="225" y2="86"/>
+          <line class="gen" x1="120" y1="86" x2="335" y2="86"/>
+          <line class="gen" x1="120" y1="86" x2="120" y2="104"/>
+          <line class="gen" x1="335" y1="86" x2="335" y2="104"/>
+          <!-- List children -->
+          <rect class="li" x="50" y="184" width="140" height="34" rx="4"/><text class="nm" x="120" y="206">ArrayList</text>
+          <rect class="cls" x="50" y="230" width="140" height="34" rx="4"/><text class="nm" x="120" y="252">Vector</text>
+          <rect class="cls" x="50" y="276" width="140" height="34" rx="4"/><text class="nm" x="120" y="298">LinkedList</text>
+          <polygon class="tri" points="70,146 62,162 78,162"/>
+          <line class="imp" x1="70" y1="162" x2="70" y2="293"/>
+          <line class="imp" x1="70" y1="201" x2="50" y2="201"/>
+          <line class="imp" x1="70" y1="247" x2="50" y2="247"/>
+          <line class="imp" x1="70" y1="293" x2="50" y2="293"/>
+          <!-- Set children -->
+          <rect class="se" x="270" y="184" width="130" height="34" rx="4"/><text class="nm" x="335" y="206">HashSet</text>
+          <rect class="cls" x="270" y="230" width="130" height="34" rx="4"/><text class="nm" x="335" y="252">TreeSet</text>
+          <polygon class="tri" points="290,146 282,162 298,162"/>
+          <line class="imp" x1="290" y1="162" x2="290" y2="247"/>
+          <line class="imp" x1="290" y1="201" x2="270" y2="201"/>
+          <line class="imp" x1="290" y1="247" x2="270" y2="247"/>
+          <!-- Map -->
+          <rect class="mp" x="575" y="12" width="150" height="42" rx="4"/>
+          <text class="nm" x="650" y="38">Map</text>
+          <rect class="cls" x="575" y="104" width="150" height="34" rx="4"/><text class="nm" x="650" y="126">Hashtable</text>
+          <rect class="mp" x="575" y="150" width="150" height="34" rx="4"/><text class="nm" x="650" y="172">HashMap</text>
+          <rect class="cls" x="575" y="196" width="150" height="34" rx="4"/><text class="nm" x="650" y="218">TreeMap</text>
+          <polygon class="tri" points="595,56 587,72 603,72"/>
+          <line class="imp" x1="595" y1="72" x2="595" y2="213"/>
+          <line class="imp" x1="595" y1="121" x2="575" y2="121"/>
+          <line class="imp" x1="595" y1="167" x2="575" y2="167"/>
+          <line class="imp" x1="595" y1="213" x2="575" y2="213"/>
+        </svg>
+        <figcaption class="muted" style="font-size:.85rem;margin-top:6px">컬렉션 계층 — <code>Collection</code> 아래 <code>List</code>·<code>Set</code>이 있고, <code>Map</code>은 별도 계층이다. 각 인터페이스를 여러 구현 클래스가 구현한다.</figcaption>
+      </figure>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 8-2. 컬렉션 선택</h4>
+      <p>① 중복 없이 회원 아이디를 저장 ② 순서대로 점수를 저장 ③ 학번→이름을 저장. 각각 알맞은 컬렉션은?</p>
+      <details><summary>정답 보기</summary>
+        <p class="muted">① Set &nbsp; ② List &nbsp; ③ Map</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="module" id="m3">
+    <h2><span class="num">3</span> List (ArrayList)</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>ArrayList로 데이터를 추가·조회·수정·삭제할 수 있다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 개념 및 설명</h3>
+      <p><b>ArrayList</b>는 순서가 있고 중복을 허용하는 가변 길이 배열입니다. 저장 용량을 초과하면 자동으로 늘어납니다.</p>
+      <table>
+        <tr><th>메서드</th><th>기능</th></tr>
+        <tr><td><code>add(e)</code></td><td>끝에 추가</td></tr>
+        <tr><td><code>get(i)</code></td><td>i번째 조회</td></tr>
+        <tr><td><code>set(i, e)</code></td><td>i번째 수정</td></tr>
+        <tr><td><code>remove(i)</code></td><td>i번째 삭제</td></tr>
+        <tr><td><code>size()</code></td><td>개수 반환</td></tr>
+      </table>
+    </div>
+    <div class="ex"><div class="lbl">💡 예제 — ArrayList로 데이터 다루기 (추가·조회·수정·삭제)</div>
+<pre><span class="k">import</span> java.util.ArrayList;
+<span class="k">import</span> java.util.List;
+
+<span class="k">public class</span> <span class="t">ArrayListTest</span> {
+    <span class="k">public static</span> <span class="k">void</span> <span class="f">main</span>(<span class="t">String</span>[] args) {
+        <span class="c">// List 타입으로 vegeList(ArrayList) 객체 생성</span>
+        <span class="t">List</span>&lt;<span class="t">String</span>&gt; vegeList = <span class="k">new</span> <span class="t">ArrayList</span>&lt;&gt;();
+
+        <span class="c">// 요소 추가</span>
+        vegeList.<span class="f">add</span>(<span class="s">"양파"</span>);
+        vegeList.<span class="f">add</span>(<span class="s">"마늘"</span>);
+        vegeList.<span class="f">add</span>(<span class="s">"감자"</span>);
+
+        <span class="t">System</span>.out.<span class="f">println</span>(vegeList);                  <span class="c">// 객체 출력</span>
+        <span class="t">System</span>.out.<span class="f">printf</span>(<span class="s">"총 객체수: %d개%n"</span>, vegeList.<span class="f">size</span>());
+        <span class="t">System</span>.out.<span class="f">println</span>(vegeList.<span class="f">get</span>(<span class="n">0</span>));            <span class="c">// 인덱싱</span>
+
+        <span class="c">// 특정 위치(2번)에 "고추" 추가</span>
+        vegeList.<span class="f">add</span>(<span class="n">2</span>, <span class="s">"고추"</span>);
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; vegeList.<span class="f">size</span>(); i++) {
+            <span class="t">System</span>.out.<span class="f">print</span>(vegeList.<span class="f">get</span>(i) + <span class="s">" "</span>);
+        }
+        <span class="t">System</span>.out.<span class="f">println</span>();
+
+        <span class="c">// 요소 수정 - 3번을 "고구마"로 변경</span>
+        vegeList.<span class="f">set</span>(<span class="n">3</span>, <span class="s">"고구마"</span>);
+        <span class="t">System</span>.out.<span class="f">println</span>(vegeList);
+
+        <span class="c">// 요소 삭제 - "마늘" 삭제</span>
+        vegeList.<span class="f">remove</span>(<span class="s">"마늘"</span>);
+
+        <span class="c">// 향상된 for문</span>
+        <span class="k">for</span> (<span class="t">String</span> vegetable : vegeList)
+            <span class="t">System</span>.out.<span class="f">print</span>(vegetable + <span class="s">" "</span>);
+    }
+}</pre>
+      <div class="out">[양파, 마늘, 감자]<br>총 객체수: 3개<br>양파<br>양파 마늘 고추 감자 <br>[양파, 마늘, 고추, 고구마]<br>양파 고추 고구마 </div>
+      <p class="muted" style="margin-top:8px"><code>remove("마늘")</code>은 값으로 삭제, <code>remove(1)</code>은 인덱스로 삭제한다. 향상된 for문으로 전체 요소를 간결하게 순회할 수 있다.</p>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 8-3. 리스트 순회</h4>
+      <p>ArrayList에 정수 3개를 넣고, 향상된 for문으로 모두 출력하세요.</p>
+      <details><summary>정답 보기</summary>
+<pre><span class="t">List</span>&lt;<span class="t">Integer</span>&gt; nums = <span class="k">new</span> <span class="t">ArrayList</span>&lt;&gt;();
+nums.<span class="f">add</span>(<span class="n">10</span>); nums.<span class="f">add</span>(<span class="n">20</span>); nums.<span class="f">add</span>(<span class="n">30</span>);
+<span class="k">for</span> (<span class="k">int</span> n : nums) <span class="t">System</span>.out.<span class="f">println</span>(n);</pre>
+      </details>
+    </div>
+  </section>
+
+  <section class="module" id="m4">
+    <h2><span class="num">4</span> Set (HashSet)</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>Set의 중복 불가·무순서 특성을 이해한다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 개념 및 설명</h3>
+      <p><b>HashSet</b>은 <b>Set 인터페이스의 구현 클래스</b>다.</p>
+      <ul>
+        <li>동일 객체 및 <b>동등 객체는 중복 저장하지 않는다.</b></li>
+        <li>순서 없이 저장한다.</li>
+        <li><b>동등 객체 판단 방법</b>: <code>hashCode()</code> 리턴값이 같고, 그 다음 <code>equals()</code>가 <code>true</code>이면 같은(동등) 객체로 본다.</li>
+      </ul>
+      <figure style="margin:16px 0;text-align:center;display:flex;flex-direction:column;align-items:center">
+        <svg id="c8d2" style="width:100%;max-width:720px;height:auto;display:block;margin:0 auto" viewBox="0 0 780 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HashSet 동등 객체 판단 흐름도">
+          <defs>
+            <marker id="c8d2arw" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L7,3 L0,6 Z" fill="#3e4c59"/>
+            </marker>
+          </defs>
+          <style>
+            #c8d2 .step{fill:#e6e6f2;stroke:#9a9ac0;stroke-width:1.5}
+            
+            #c8d2 .same{fill:#fbe0c2;stroke:#e0955a;stroke-width:1.5}
+            #c8d2 .diff{fill:#f6cfcf;stroke:#cf6a6a;stroke-width:1.5}
+            #c8d2 .t{font-family:"Malgun Gothic","맑은 고딕",sans-serif;font-size:15px;fill:#1f2933;text-anchor:middle}
+            #c8d2 .lbl{font-family:"Malgun Gothic","맑은 고딕",sans-serif;font-size:13px;fill:#3e4c59;text-anchor:middle}
+            #c8d2 .lblr{font-family:"Malgun Gothic","맑은 고딕",sans-serif;font-size:13px;font-weight:700;fill:#c0392b;text-anchor:middle}
+            #c8d2 .flow{stroke:#3e4c59;stroke-width:1.6;fill:none}
+          </style>
+          <rect class="step" x="40" y="30" width="210" height="64" rx="10"/>
+          <text class="t" x="145" y="68">hashCode() 리턴값</text>
+          <rect class="step" x="320" y="30" width="210" height="64" rx="10"/>
+          <text class="t" x="425" y="68">equals() 리턴값</text>
+          <ellipse class="same" cx="690" cy="62" rx="82" ry="42"/>
+          <text class="t" x="690" y="68">동등 객체</text>
+          <ellipse class="diff" cx="425" cy="238" rx="92" ry="42"/>
+          <text class="t" x="425" y="244">다른 객체</text>
+          <!-- hashCode -> equals (같음) -->
+          <line class="flow" x1="250" y1="62" x2="316" y2="62" marker-end="url(#c8d2arw)"/>
+          <text class="lblr" x="283" y="50">같음</text>
+          <!-- equals -> 동등객체 (true) -->
+          <line class="flow" x1="530" y1="62" x2="604" y2="62" marker-end="url(#c8d2arw)"/>
+          <text class="lblr" x="567" y="50">true</text>
+          <!-- equals -> 다른객체 (false) -->
+          <line class="flow" x1="425" y1="94" x2="425" y2="192" marker-end="url(#c8d2arw)"/>
+          <text class="lbl" x="447" y="140">false</text>
+          <!-- hashCode -> 다른객체 (다름) -->
+          <path class="flow" d="M145,94 L145,238 L329,238" marker-end="url(#c8d2arw)"/>
+          <text class="lbl" x="168" y="150">다름</text>
+        </svg>
+        <figcaption class="muted" style="font-size:.85rem;margin-top:6px">동등 객체 판단 — <code>hashCode()</code>가 같고 <code>equals()</code>가 <code>true</code>일 때만 같은 객체로 보고 중복 저장하지 않는다.</figcaption>
+      </figure>
+    </div>
+    <div class="concept"><h3 class="blk">🔁 Iterator 반복자</h3>
+      <p>순서가 없는 Set은 인덱스로 접근할 수 없어 <b>Iterator</b>(반복자)로 요소를 하나씩 꺼냅니다. <code>hasNext()</code>로 다음 요소 유무를 확인하고 <code>next()</code>로 가져옵니다. 아래 HashSet 예제에서도 이 방식으로 순회합니다.</p>
+<pre><span class="t">Iterator</span>&lt;<span class="t">String</span>&gt; it = set.<span class="f">iterator</span>();
+<span class="k">while</span> (it.<span class="f">hasNext</span>()) {
+    <span class="t">System</span>.out.<span class="f">println</span>(it.<span class="f">next</span>());   <span class="c">// 요소 1개씩 꺼내기</span>
+}</pre>
+    </div>
+    <div class="ex"><div class="lbl">💡 예제 — HashSet 사용 (추가·검색·순회·삭제)</div>
+<pre><span class="k">public class</span> <span class="t">HashSetTest</span> {
+    <span class="k">public static</span> <span class="k">void</span> <span class="f">main</span>(<span class="t">String</span>[] args) {
+        <span class="c">// Set 타입으로 HashSet 객체 생성</span>
+        <span class="t">Set</span>&lt;<span class="t">String</span>&gt; set = <span class="k">new</span> <span class="t">HashSet</span>&lt;&gt;();
+
+        <span class="c">// 요소 추가</span>
+        set.<span class="f">add</span>(<span class="s">"Java"</span>);
+        set.<span class="f">add</span>(<span class="s">"C++"</span>);
+        set.<span class="f">add</span>(<span class="s">"Python"</span>);
+        set.<span class="f">add</span>(<span class="s">"Java"</span>);      <span class="c">// 중복 → 저장 안 됨</span>
+        set.<span class="f">add</span>(<span class="s">"JDBC"</span>);
+
+        <span class="c">// 객체 출력 - 순서 없고, 중복 불가</span>
+        <span class="t">System</span>.out.<span class="f">println</span>(set);
+        <span class="k">int</span> size = set.<span class="f">size</span>();
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"총 객체수: "</span> + size);
+
+        <span class="c">// 특정 요소 검색</span>
+        <span class="k">if</span> (set.<span class="f">contains</span>(<span class="s">"JDBC"</span>)) {
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"JDBC"</span>);
+        }
+
+        <span class="c">// 전체 요소 출력 - 반복자(Iterator)</span>
+        <span class="t">Iterator</span>&lt;<span class="t">String</span>&gt; ir = set.<span class="f">iterator</span>();
+        <span class="k">while</span> (ir.<span class="f">hasNext</span>()) {
+            <span class="t">String</span> element = ir.<span class="f">next</span>();
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"\t"</span> + element);
+        }
+
+        <span class="c">// 요소 삭제</span>
+        <span class="k">if</span> (set.<span class="f">contains</span>(<span class="s">"C++"</span>)) {
+            set.<span class="f">remove</span>(<span class="s">"C++"</span>);
+        }
+
+        <span class="c">// 향상된 for문</span>
+        <span class="k">for</span> (<span class="t">String</span> element : set)
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"\t"</span> + element);
+    }
+}</pre>
+      <p class="muted" style="margin-top:8px">중복된 <code>"Java"</code>는 한 번만 저장되고, 저장 순서는 보장되지 않는다. Set은 인덱스가 없어 전체 순회에는 <b>Iterator</b>나 <b>향상된 for문</b>을 사용한다.</p>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 8-4. 중복 제거</h4>
+      <p>배열 <code>{1,2,2,3,3,3}</code>의 중복을 제거해 서로 다른 값의 개수를 구하세요.</p>
+      <details><summary>정답 보기</summary>
+<pre><span class="k">int</span>[] a = {<span class="n">1</span>,<span class="n">2</span>,<span class="n">2</span>,<span class="n">3</span>,<span class="n">3</span>,<span class="n">3</span>};
+<span class="t">Set</span>&lt;<span class="t">Integer</span>&gt; set = <span class="k">new</span> <span class="t">HashSet</span>&lt;&gt;();
+<span class="k">for</span> (<span class="k">int</span> n : a) set.<span class="f">add</span>(n);
+<span class="t">System</span>.out.<span class="f">println</span>(set.<span class="f">size</span>());   <span class="c">// 3</span></pre>
+      </details>
+      <h4 style="margin-top:18px">실습 8-5. Iterator로 Set 순회</h4>
+      <p>HashSet에 "빨강","파랑","초록"을 넣고 Iterator로 모두 출력하세요.</p>
+      <details><summary>정답 보기</summary>
+<pre><span class="t">Set</span>&lt;<span class="t">String</span>&gt; s = <span class="k">new</span> <span class="t">HashSet</span>&lt;&gt;();
+s.<span class="f">add</span>(<span class="s">"빨강"</span>); s.<span class="f">add</span>(<span class="s">"파랑"</span>); s.<span class="f">add</span>(<span class="s">"초록"</span>);
+<span class="t">Iterator</span>&lt;<span class="t">String</span>&gt; it = s.<span class="f">iterator</span>();
+<span class="k">while</span> (it.<span class="f">hasNext</span>()) <span class="t">System</span>.out.<span class="f">println</span>(it.<span class="f">next</span>());</pre>
+      </details>
+    </div>
+  </section>
+
+  <section class="module" id="m5">
+    <h2><span class="num">5</span> Map (HashMap)</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>키-값 쌍으로 데이터를 저장·검색할 수 있다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 개념 및 설명</h3>
+      <p><b>Map 인터페이스</b>는 <b>키(key)와 값(value)</b>의 쌍으로 저장합니다. 키는 중복될 수 없고, 키로 값을 빠르게 찾습니다. 구현 클래스로 <code>Hashtable</code>, <code>HashMap</code>, <code>TreeMap</code>이 있습니다.</p>
+      <figure style="margin:14px 0;text-align:center;display:flex;flex-direction:column;align-items:center">
+        <svg id="c8d3" style="width:100%;max-width:420px;height:auto;display:block;margin:0 auto" viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map 인터페이스와 구현 클래스 다이어그램">
+          <style>
+            #c8d3 .mp{fill:#f6cfcf;stroke:#cf6a6a;stroke-width:1.5}
+            #c8d3 .impl{fill:#fbe0c2;stroke:#e0955a;stroke-width:1.5}
+            #c8d3 .t{font-family:"Malgun Gothic","맑은 고딕",sans-serif;font-size:15px;fill:#1f2933;text-anchor:middle}
+            #c8d3 .gen{stroke:#e0955a;stroke-width:1.4;fill:none}
+            #c8d3 .tri{fill:#fff;stroke:#e0955a;stroke-width:1.4}
+          </style>
+          <rect class="mp" x="30" y="14" width="150" height="48" rx="8"/>
+          <text class="t" x="105" y="44">Map</text>
+          <rect class="impl" x="185" y="86" width="150" height="46" rx="8"/><text class="t" x="260" y="114">Hashtable</text>
+          <rect class="impl" x="185" y="150" width="150" height="46" rx="8"/><text class="t" x="260" y="178">HashMap</text>
+          <rect class="impl" x="185" y="214" width="150" height="46" rx="8"/><text class="t" x="260" y="242">TreeMap</text>
+          <!-- 구현: 속 빈 삼각형이 Map을 향함 -->
+          <polygon class="tri" points="105,64 97,80 113,80"/>
+          <line class="gen" x1="105" y1="80" x2="105" y2="109"/>
+          <line class="gen" x1="105" y1="109" x2="185" y2="109"/>
+          <line class="gen" x1="105" y1="173" x2="185" y2="173"/>
+          <line class="gen" x1="105" y1="237" x2="185" y2="237"/>
+          <line class="gen" x1="105" y1="109" x2="105" y2="237"/>
+        </svg>
+        <figcaption class="muted" style="font-size:.85rem;margin-top:6px">Map 계층 — <code>Map</code>을 <code>Hashtable</code>·<code>HashMap</code>·<code>TreeMap</code>이 구현한다.</figcaption>
+      </figure>
+      <table>
+        <tr><th>메서드</th><th>기능</th></tr>
+        <tr><td><code>put(k, v)</code></td><td>키로 값 저장</td></tr>
+        <tr><td><code>get(k)</code></td><td>키로 값 조회</td></tr>
+        <tr><td><code>containsKey(k)</code></td><td>키 존재 여부</td></tr>
+        <tr><td><code>remove(k)</code></td><td>키로 삭제</td></tr>
+      </table>
+    </div>
+    <div class="ex"><div class="lbl">💡 예제 — ① HashMap 사용 (저장·검색·수정·순회·삭제)</div>
+<pre><span class="k">public class</span> <span class="t">HashMapTest</span> {
+    <span class="k">public static</span> <span class="k">void</span> <span class="f">main</span>(<span class="t">String</span>[] args) {
+        <span class="c">// 이름과 점수를 저장할 Map 객체 생성</span>
+        <span class="t">Map</span>&lt;<span class="t">String</span>, <span class="t">Integer</span>&gt; map = <span class="k">new</span> <span class="t">HashMap</span>&lt;&gt;();
+
+        <span class="c">// 요소 저장</span>
+        map.<span class="f">put</span>(<span class="s">"강감찬"</span>, <span class="n">95</span>);
+        map.<span class="f">put</span>(<span class="s">"홍길동"</span>, <span class="n">75</span>);
+        map.<span class="f">put</span>(<span class="s">"이순신"</span>, <span class="n">80</span>);
+
+        <span class="c">// 요소의 개수</span>
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"요소 수 - "</span> + map.<span class="f">size</span>() + <span class="s">"개"</span>);
+
+        <span class="c">// 요소 검색</span>
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"홍길동의 점수: "</span> + map.<span class="f">get</span>(<span class="s">"홍길동"</span>));
+
+        <span class="c">// 요소 수정 - 키는 중복되지 않으므로 기존 값을 덮어씀</span>
+        map.<span class="f">put</span>(<span class="s">"이순신"</span>, <span class="n">85</span>);
+
+        <span class="c">// 반복자 객체로 출력 (순서 없이 출력됨)</span>
+        <span class="t">Iterator</span>&lt;<span class="t">String</span>&gt; iterator = map.<span class="f">keySet</span>().<span class="f">iterator</span>();
+        <span class="k">while</span> (iterator.<span class="f">hasNext</span>()) {
+            <span class="t">String</span> key = iterator.<span class="f">next</span>();
+            <span class="t">Integer</span> value = map.<span class="f">get</span>(key);
+            <span class="t">System</span>.out.<span class="f">println</span>(key + <span class="s">" : "</span> + value);
+        }
+
+        <span class="c">// 요소 삭제</span>
+        <span class="k">if</span> (map.<span class="f">containsKey</span>(<span class="s">"홍길동"</span>)) {
+            map.<span class="f">remove</span>(<span class="s">"홍길동"</span>);
+        }
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"요소 수 - "</span> + map.<span class="f">size</span>() + <span class="s">"개"</span>);
+    }
+}</pre>
+      <p class="muted" style="margin-top:8px">같은 키로 <code>put</code>하면 값이 <b>덮어써진다</b>(수정). 키 목록은 <code>keySet()</code>으로 얻어 <code>Iterator</code>나 향상된 for문으로 순회한다.</p>
+    </div>
+    <div class="ex"><div class="lbl">💡 예제 — ② 컴퓨터 용어 사전 (HashMap + Scanner)</div>
+      <p class="muted" style="margin:0 0 8px">HashMap으로 용어와 정의를 저장하고, 사용자가 입력한 단어의 뜻을 찾아준다. <code>q</code> 입력 시 종료.</p>
+<pre><span class="k">public class</span> <span class="t">Dictionary</span> {
+    <span class="k">public static</span> <span class="k">void</span> <span class="f">main</span>(<span class="t">String</span>[] args) {
+        <span class="c">// Map 자료구조 객체 생성</span>
+        <span class="t">Map</span>&lt;<span class="t">String</span>, <span class="t">String</span>&gt; dic = <span class="k">new</span> <span class="t">HashMap</span>&lt;&gt;();
+
+        <span class="c">// 단어와 정의 저장</span>
+        dic.<span class="f">put</span>(<span class="s">"이진수"</span>, <span class="s">"컴퓨터가 사용하는 0과 1만으로 이루어진 수"</span>);
+        dic.<span class="f">put</span>(<span class="s">"비트"</span>, <span class="s">"정보 기술에서 데이터의 가장 작은 단위로, 0 또는 1의 값을 가진다."</span>);
+        dic.<span class="f">put</span>(<span class="s">"버그"</span>, <span class="s">"프로그램이 적절하게 동작하는데 실패하거나 오류가 발생하는 코드"</span>);
+        dic.<span class="f">put</span>(<span class="s">"알고리즘"</span>, <span class="s">"어떤 문제를 해결하기 위해 정해진 절차"</span>);
+
+        <span class="t">Scanner</span> sc = <span class="k">new</span> <span class="t">Scanner</span>(<span class="t">System</span>.in);
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"================================"</span>);
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"프로그램을 종료하려면 q 또는 Q를 입력하세요"</span>);
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"================================"</span>);
+
+        <span class="k">while</span> (<span class="k">true</span>) {
+            <span class="t">System</span>.out.<span class="f">print</span>(<span class="s">"검색할 단어를 입력하세요: "</span>);
+            <span class="t">String</span> word = sc.<span class="f">nextLine</span>();      <span class="c">// 단어 입력</span>
+
+            <span class="c">// 검색 종료</span>
+            <span class="k">if</span> (word.<span class="f">toLowerCase</span>().<span class="f">equals</span>(<span class="s">"q"</span>)) {
+                <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"프로그램을 종료합니다."</span>);
+                <span class="k">break</span>;
+            }
+
+            <span class="c">// 정의된 단어 가져오기</span>
+            <span class="t">String</span> definition = dic.<span class="f">get</span>(word);
+            <span class="k">if</span> (definition != <span class="k">null</span>) {
+                <span class="t">System</span>.out.<span class="f">println</span>(definition);
+            } <span class="k">else</span> {
+                <span class="t">System</span>.out.<span class="f">println</span>(word + <span class="s">"는 없는 단어입니다."</span>);
+            }
+        }
+        sc.<span class="f">close</span>();
+    }
+}</pre>
+      <div class="out">================================<br>프로그램을 종료하려면 q 또는 Q를 입력하세요<br>================================<br>검색할 단어를 입력하세요: 비트<br>정보 기술에서 데이터의 가장 작은 단위로, 0 또는 1의 값을 가진다.<br>검색할 단어를 입력하세요: 버그<br>프로그램이 적절하게 동작하는데 실패하거나 오류가 발생하는 코드<br>검색할 단어를 입력하세요: q<br>프로그램을 종료합니다.</div>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 8-6. 용어 사전</h4>
+      <p>HashMap에 "CPU"→"중앙처리장치"를 저장하고, "CPU"로 값을 검색해 출력하세요.</p>
+      <details><summary>정답 보기</summary>
+<pre><span class="t">Map</span>&lt;<span class="t">String</span>, <span class="t">String</span>&gt; dict = <span class="k">new</span> <span class="t">HashMap</span>&lt;&gt;();
+dict.<span class="f">put</span>(<span class="s">"CPU"</span>, <span class="s">"중앙처리장치"</span>);
+<span class="t">System</span>.out.<span class="f">println</span>(dict.<span class="f">get</span>(<span class="s">"CPU"</span>));</pre>
+      </details>
+    </div>
+  </section>
+
+  <section class="module" id="m6">
+    <h2><span class="num">6</span> Stack과 Queue</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>Stack(LIFO)과 Queue(FIFO)의 차이를 설명할 수 있다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 Stack 클래스</h3>
+      <ul>
+        <li><b>후입선출(LIFO : Last In First Out)</b> 구조 — 나중에 넣은 것이 먼저 나온다.</li>
+        <li>응용 예: JVM 스택 메모리, 접시닦이, 게임 무르기(실행 취소)</li>
+      </ul>
+      <table>
+        <tr><th>메서드</th><th>설명</th></tr>
+        <tr><td><code>push(obj)</code></td><td>주어진 객체를 스택에 넣는다.</td></tr>
+        <tr><td><code>pop()</code></td><td>스택의 맨 위 객체를 가져오고, 스택에서 제거한다.</td></tr>
+        <tr><td><code>isEmpty()</code></td><td>스택이 비어 있는지 여부를 반환한다.</td></tr>
+      </table>
+    </div>
+    <div class="ex"><div class="lbl">💡 Stack 예제 — 동전 넣고 빼기 (Coin, StackCoinTest)</div>
+<pre><span class="k">package</span> collection.list;
+
+<span class="k">import</span> java.util.Stack;
+
+<span class="k">class</span> <span class="t">Coin</span> {
+    <span class="k">private</span> <span class="k">int</span> value;
+    <span class="k">public</span> <span class="f">Coin</span>(<span class="k">int</span> value) { <span class="k">this</span>.value = value; }
+    <span class="k">public</span> <span class="k">int</span> <span class="f">getValue</span>() { <span class="k">return</span> value; }
+}
+
+<span class="k">public class</span> <span class="t">StackCoinTest</span> {
+    <span class="k">public static</span> <span class="k">void</span> <span class="f">main</span>(<span class="t">String</span>[] args) {
+        <span class="t">Stack</span>&lt;<span class="t">Coin</span>&gt; coinBox = <span class="k">new</span> <span class="t">Stack</span>&lt;&gt;();
+
+        <span class="c">// 스택에 동전 넣기 (순서: 500 - 100 - 50 - 10)</span>
+        coinBox.<span class="f">push</span>(<span class="k">new</span> <span class="t">Coin</span>(<span class="n">500</span>));
+        coinBox.<span class="f">push</span>(<span class="k">new</span> <span class="t">Coin</span>(<span class="n">100</span>));
+        coinBox.<span class="f">push</span>(<span class="k">new</span> <span class="t">Coin</span>(<span class="n">50</span>));
+        coinBox.<span class="f">push</span>(<span class="k">new</span> <span class="t">Coin</span>(<span class="n">10</span>));
+
+        <span class="c">// 스택에서 동전 빼기 (순서: 10 - 50 - 100 - 500)</span>
+        <span class="k">while</span> (!coinBox.<span class="f">isEmpty</span>()) {
+            <span class="t">Coin</span> coin = coinBox.<span class="f">pop</span>();
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"꺼낸 동전 : "</span> + coin.<span class="f">getValue</span>() + <span class="s">"원"</span>);
+        }
+    }
+}</pre>
+      <div class="out">꺼낸 동전 : 10원<br>꺼낸 동전 : 50원<br>꺼낸 동전 : 100원<br>꺼낸 동전 : 500원</div>
+      <p class="muted" style="margin-top:8px">넣은 순서(500→10)의 <b>역순(10→500)</b>으로 나온다. 이것이 후입선출(LIFO)이다.</p>
+    </div>
+
+    <div class="concept"><h3 class="blk">📖 Queue 인터페이스</h3>
+      <ul>
+        <li><b>선입선출(FIFO : First In First Out)</b> 구조 — 먼저 넣은 것이 먼저 나온다.</li>
+        <li>응용 예: 버스정류장 줄서기, 운영체제 메시지 큐</li>
+      </ul>
+      <table>
+        <tr><th>메서드</th><th>설명</th></tr>
+        <tr><td><code>offer(obj)</code></td><td>주어진 객체를 큐에 넣는다.</td></tr>
+        <tr><td><code>poll()</code></td><td>객체 하나를 가져오고, 큐에서 제거한다.</td></tr>
+        <tr><td><code>isEmpty()</code></td><td>큐가 비어 있는지 여부를 반환한다.</td></tr>
+      </table>
+      <figure style="margin:14px 0;text-align:center;display:flex;flex-direction:column;align-items:center">
+        <svg id="c8d4" style="width:100%;max-width:460px;height:auto;display:block;margin:0 auto" viewBox="0 0 460 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="큐(Queue) 선입선출 구조 다이어그램">
+          <defs>
+            <marker id="c8d4arw" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L7,3 L0,6 Z" fill="#3e4c59"/>
+            </marker>
+          </defs>
+          <style>
+            #c8d4 .bar{stroke:#1f2933;stroke-width:3}
+            #c8d4 .el{fill:#dcd7f2;stroke:#8a7fc0;stroke-width:1.4}
+            #c8d4 .t{font-family:"Malgun Gothic","맑은 고딕",sans-serif;font-size:15px;fill:#1f2933;text-anchor:middle}
+            #c8d4 .lbl{font-family:"Malgun Gothic","맑은 고딕",sans-serif;font-size:13px;fill:#3e4c59;text-anchor:middle}
+            #c8d4 .flow{stroke:#3e4c59;stroke-width:1.6;fill:none}
+          </style>
+          <line class="bar" x1="150" y1="60" x2="310" y2="60"/>
+          <line class="bar" x1="150" y1="120" x2="310" y2="120"/>
+          <ellipse class="el" cx="180" cy="90" rx="22" ry="28"/><text class="t" x="180" y="96">3</text>
+          <ellipse class="el" cx="230" cy="90" rx="22" ry="28"/><text class="t" x="230" y="96">2</text>
+          <ellipse class="el" cx="280" cy="90" rx="22" ry="28"/><text class="t" x="280" y="96">1</text>
+          <!-- 넣기 (enqueue) 오른쪽에서 -->
+          <line class="flow" x1="420" y1="90" x2="330" y2="90" marker-end="url(#c8d4arw)"/>
+          <text class="lbl" x="380" y="72">넣기</text>
+          <text class="lbl" x="380" y="118">(enqueue)</text>
+          <!-- 빼기 (dequeue) 왼쪽으로 -->
+          <line class="flow" x1="130" y1="90" x2="40" y2="90" marker-end="url(#c8d4arw)"/>
+          <text class="lbl" x="80" y="72">빼기</text>
+          <text class="lbl" x="80" y="118">(dequeue)</text>
+          <text class="lbl" x="230" y="160">큐(Queue)</text>
+        </svg>
+        <figcaption class="muted" style="font-size:.85rem;margin-top:6px">오른쪽으로 넣고(enqueue) 왼쪽에서 뺀다(dequeue). 먼저 들어간 1이 먼저 나온다.</figcaption>
+      </figure>
+    </div>
+    <div class="ex"><div class="lbl">💡 Queue 예제 — ArrayList로 큐 구현 (MyQueue, ArrayQueueTest)</div>
+<pre><span class="k">class</span> <span class="t">MyQueue</span> {
+    <span class="k">private</span> <span class="t">ArrayList</span>&lt;<span class="t">String</span>&gt; arrayQueue = <span class="k">new</span> <span class="t">ArrayList</span>&lt;&gt;();
+
+    <span class="c">// 큐의 맨 뒤에 추가</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="f">enQueue</span>(<span class="t">String</span> data) {
+        arrayQueue.<span class="f">add</span>(data);
+    }
+
+    <span class="c">// 큐의 맨 앞에서 꺼냄</span>
+    <span class="k">public</span> <span class="t">String</span> <span class="f">deQueue</span>() {
+        <span class="k">int</span> len = arrayQueue.<span class="f">size</span>();
+        <span class="k">if</span> (len == <span class="n">0</span>) {
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"큐가 비었습니다."</span>);
+            <span class="k">return</span> <span class="k">null</span>;
+        }
+        <span class="k">return</span> arrayQueue.<span class="f">remove</span>(<span class="n">0</span>);   <span class="c">// 맨 앞(0번) 제거·반환</span>
+    }
+}
+
+<span class="k">public class</span> <span class="t">ArrayQueueTest</span> {
+    <span class="k">public static</span> <span class="k">void</span> <span class="f">main</span>(<span class="t">String</span>[] args) {
+        <span class="t">MyQueue</span> queue = <span class="k">new</span> <span class="t">MyQueue</span>();
+        queue.<span class="f">enQueue</span>(<span class="s">"A"</span>);
+        queue.<span class="f">enQueue</span>(<span class="s">"B"</span>);
+        queue.<span class="f">enQueue</span>(<span class="s">"C"</span>);
+
+        <span class="t">System</span>.out.<span class="f">println</span>(queue.<span class="f">deQueue</span>());
+        <span class="t">System</span>.out.<span class="f">println</span>(queue.<span class="f">deQueue</span>());
+        <span class="t">System</span>.out.<span class="f">println</span>(queue.<span class="f">deQueue</span>());
+        <span class="t">System</span>.out.<span class="f">println</span>(queue.<span class="f">deQueue</span>());   <span class="c">// 비어 있음</span>
+    }
+}</pre>
+      <div class="out">A<br>B<br>C<br>큐가 비었습니다.<br>null</div>
+      <p class="muted" style="margin-top:8px">넣은 순서(A→B→C)와 <b>같은 순서</b>로 나온다. 이것이 선입선출(FIFO)이다.</p>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 8-7. LIFO 확인</h4>
+      <p>Stack에 1, 2, 3을 순서대로 push한 뒤 두 번 pop하면 출력되는 값은?</p>
+      <details><summary>정답 보기</summary>
+        <p class="muted">3, 2 (후입선출이므로 마지막에 넣은 것부터 나온다)</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="module" id="m7">
+    <h2><span class="num">7</span> 미니 프로젝트 · 은행 거래</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>컬렉션(ArrayList)·enum·예외 처리를 종합해 콘솔 프로그램을 만들 수 있다.</li>
+      <li>메뉴 기반 반복 구조로 계좌 생성·예금·출금·조회 기능을 구현할 수 있다.</li>
+    </ul></div>
+    <div class="concept"><h3 class="blk">📖 프로젝트 개요</h3>
+      <p>계좌(<code>BankAccount</code>)를 <code>ArrayList</code>로 관리하고, 각 계좌의 거래를 <code>Transaction</code>과 <code>TransactionType</code>(enum)으로 기록하는 콘솔 은행 프로그램이다. 메뉴는 <b>1.계좌 생성 · 2.예금 · 3.출금 · 4.계좌 검색 · 5.종료</b>로 구성된다.</p>
+      <figure style="margin:16px 0;text-align:center;display:flex;flex-direction:column;align-items:center">
+        <svg id="c8d5" style="width:100%;max-width:780px;height:auto;display:block;margin:0 auto" viewBox="0 0 820 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="은행 프로젝트 클래스 다이어그램">
+          <defs>
+            <marker id="c8d5arw" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L8,3 L0,6 Z" fill="#3e4c59"/>
+            </marker>
+          </defs>
+          <style>
+            #c8d5 .cls{fill:#fff;stroke:#5a8ac0;stroke-width:1.5}
+            #c8d5 .div{stroke:#5a8ac0;stroke-width:1.5}
+            #c8d5 .nm{font-family:"Malgun Gothic","맑은 고딕",sans-serif;font-weight:700;font-size:17px;fill:#1f2933;text-anchor:middle}
+            #c8d5 .st{font-family:"Malgun Gothic","맑은 고딕",sans-serif;font-size:13px;fill:#52606d;text-anchor:middle}
+            #c8d5 .mt{font-family:"Malgun Gothic","맑은 고딕",sans-serif;font-size:14.5px;fill:#1f2933;text-anchor:start}
+            #c8d5 .assoc{stroke:#3e4c59;stroke-width:1.5;fill:none}
+          </style>
+          <!-- BankAccount -->
+          <rect class="cls" x="18" y="16" width="308" height="300"/>
+          <line class="div" x1="18" y1="52" x2="326" y2="52"/>
+          <line class="div" x1="18" y1="184" x2="326" y2="184"/>
+          <text class="nm" x="172" y="41">BankAccount</text>
+          <text class="mt" x="30" y="76">- accountNumber : String</text>
+          <text class="mt" x="30" y="100">- owner : String</text>
+          <text class="mt" x="30" y="124">- balance : int</text>
+          <text class="mt" x="30" y="148">- transactions : List&lt;Transaction&gt;</text>
+          <text class="mt" x="30" y="208">+ deposit(amount : int)</text>
+          <text class="mt" x="30" y="232">+ withdraw(amount : int)</text>
+          <text class="mt" x="30" y="256">+ displayInfo()</text>
+          <text class="mt" x="30" y="280">+ getTransactionHistory()</text>
+          <!-- Transaction -->
+          <rect class="cls" x="470" y="34" width="270" height="140"/>
+          <line class="div" x1="470" y1="70" x2="740" y2="70"/>
+          <line class="div" x1="470" y1="120" x2="740" y2="120"/>
+          <text class="nm" x="605" y="58">Transaction</text>
+          <text class="mt" x="482" y="94">~ type : TransactionType</text>
+          <text class="mt" x="482" y="112">~ amount : int</text>
+          <text class="mt" x="482" y="150">+ Transaction(type, amount)</text>
+          <!-- TransactionType enum -->
+          <rect class="cls" x="500" y="266" width="240" height="140"/>
+          <line class="div" x1="500" y1="322" x2="740" y2="322"/>
+          <text class="st" x="620" y="290">&#171;enumeration&#187;</text>
+          <text class="nm" x="620" y="310">TransactionType</text>
+          <text class="mt" x="512" y="350">입금</text>
+          <text class="mt" x="512" y="378">출금</text>
+          <!-- 연관: BankAccount -> Transaction -->
+          <line class="assoc" x1="326" y1="150" x2="466" y2="104" marker-end="url(#c8d5arw)"/>
+          <!-- 연관: Transaction -> TransactionType -->
+          <line class="assoc" x1="605" y1="174" x2="605" y2="262" marker-end="url(#c8d5arw)"/>
+        </svg>
+        <figcaption class="muted" style="font-size:.85rem;margin-top:6px">UML 클래스 다이어그램 — <code>-</code> private, <code>~</code> package, <code>+</code> public 가시성. <code>BankAccount</code>가 <code>Transaction</code>을, <code>Transaction</code>이 <code>&#171;enumeration&#187; TransactionType</code>을 연관(참조)한다.</figcaption>
+      </figure>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 ① TransactionType (enum) · Transaction 클래스</div>
+<pre><span class="k">package</span> bankapp1_1;
+
+<span class="k">public enum</span> <span class="t">TransactionType</span> {
+    입금,
+    출금
+}</pre>
+<pre><span class="k">public class</span> <span class="t">Transaction</span> {
+    <span class="t">TransactionType</span> type;   <span class="c">// 거래 유형(enum 참조)</span>
+    <span class="k">int</span> amount;             <span class="c">// 거래 금액</span>
+
+    <span class="k">public</span> <span class="f">Transaction</span>(<span class="t">TransactionType</span> type, <span class="k">int</span> amount) {
+        <span class="k">this</span>.type = type;
+        <span class="k">this</span>.amount = amount;
+    }
+}</pre>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 ② BankAccount — 필드 · 생성자 · 유효성 검사 · getter/setter</div>
+<pre><span class="k">public class</span> <span class="t">BankAccount</span> {
+    <span class="k">private</span> <span class="t">String</span> accountNumber;   <span class="c">// 계좌 번호</span>
+    <span class="k">private</span> <span class="t">String</span> owner;           <span class="c">// 계좌주</span>
+    <span class="k">private</span> <span class="k">int</span> balance;            <span class="c">// 잔고</span>
+    <span class="t">ArrayList</span>&lt;<span class="t">Transaction</span>&gt; transactions;
+
+    <span class="c">// 계좌 번호 정규식 패턴</span>
+    <span class="k">private static final</span> <span class="t">String</span> ACCOUNT_PATTERN =
+            <span class="s">"^[0-9]{2,4}-[0-9]{2,4}-[0-9]{4,8}$"</span>;
+
+    <span class="c">// 생성자</span>
+    <span class="k">public</span> <span class="f">BankAccount</span>(<span class="t">String</span> accountNumber, <span class="t">String</span> owner) {
+        <span class="k">if</span> (!<span class="f">isValidAccountNumber</span>(accountNumber)) {
+            <span class="k">throw</span> <span class="k">new</span> <span class="t">IllegalArgumentException</span>(<span class="s">"유효하지 않은 계좌번호 형식입니다."</span>);
+        }
+        <span class="k">this</span>.accountNumber = accountNumber;
+        <span class="k">this</span>.owner = owner;
+        <span class="k">this</span>.balance = <span class="n">0</span>;
+        transactions = <span class="k">new</span> <span class="t">ArrayList</span>&lt;&gt;();
+    }
+
+    <span class="c">// 계좌 번호 유효성 검사</span>
+    <span class="k">private</span> <span class="k">boolean</span> <span class="f">isValidAccountNumber</span>(<span class="t">String</span> accountNumber) {
+        <span class="k">return</span> <span class="t">Pattern</span>.<span class="f">matches</span>(ACCOUNT_PATTERN, accountNumber);
+    }
+
+    <span class="c">// setter, getter</span>
+    <span class="k">public</span> <span class="t">String</span> <span class="f">getAccountNumber</span>() { <span class="k">return</span> accountNumber; }
+    <span class="k">public</span> <span class="k">void</span> <span class="f">setAccountNumber</span>(<span class="t">String</span> accountNumber) { <span class="k">this</span>.accountNumber = accountNumber; }
+    <span class="k">public</span> <span class="k">int</span> <span class="f">getBalance</span>() { <span class="k">return</span> balance; }
+    <span class="k">public</span> <span class="k">void</span> <span class="f">setBalance</span>(<span class="k">int</span> balance) { <span class="k">this</span>.balance = balance; }</pre>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 ③ BankAccount — 거래 추가 · 거래 내역 · 계좌 정보</div>
+<pre>    <span class="c">// 거래 추가</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="f">addTransaction</span>(<span class="t">TransactionType</span> type, <span class="k">int</span> amount) {
+        <span class="t">Transaction</span> transaction = <span class="k">new</span> <span class="t">Transaction</span>(type, amount);
+        transactions.<span class="f">add</span>(transaction);
+    }
+
+    <span class="c">// 거래 내역 조회</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="f">getTransactionHistory</span>() {
+        <span class="k">if</span> (transactions.<span class="f">isEmpty</span>()) {
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"거래 내역이 없습니다."</span>);
+            <span class="k">return</span>;
+        }
+        <span class="k">for</span> (<span class="t">Transaction</span> transaction : transactions) {
+            <span class="t">System</span>.out.<span class="f">print</span>(<span class="s">" |"</span> + (transaction.type == <span class="t">TransactionType</span>.입금 ? <span class="s">"입금"</span> : <span class="s">"출금"</span>));
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"| "</span> + transaction.amount + <span class="s">"원"</span>);
+        }
+    }
+
+    <span class="c">// 계좌 정보 출력</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="f">displayInfo</span>() {
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"계좌 정보"</span>);
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"   계좌 번호: "</span> + accountNumber);
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"   계좌주: "</span> + owner);
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"   잔고: "</span> + balance);
+    }
+} <span class="c">// BankAccount 끝</span></pre>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 ④ Main — 메뉴 반복 · switch 분기</div>
+<pre><span class="k">public class</span> <span class="t">Main</span> {
+    <span class="k">static</span> <span class="t">List</span>&lt;<span class="t">BankAccount</span>&gt; accountList = <span class="k">new</span> <span class="t">ArrayList</span>&lt;&gt;();
+    <span class="k">static</span> <span class="t">Scanner</span> scan = <span class="k">new</span> <span class="t">Scanner</span>(<span class="t">System</span>.in);
+
+    <span class="k">public static</span> <span class="k">void</span> <span class="f">main</span>(<span class="t">String</span>[] args) {
+        <span class="k">boolean</span> run = <span class="k">true</span>;
+        <span class="k">while</span> (run) {
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"========================================="</span>);
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"1.계좌 생성 | 2.예금 | 3.출금 | 4.계좌 검색 | 5.종료"</span>);
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"========================================="</span>);
+            <span class="t">System</span>.out.<span class="f">print</span>(<span class="s">"선택> "</span>);
+            <span class="k">int</span> choice = <span class="t">Integer</span>.<span class="f">parseInt</span>(scan.<span class="f">nextLine</span>());
+
+            <span class="k">switch</span> (choice) {
+                <span class="k">case</span> <span class="n">1</span>: <span class="f">createAccount</span>(); <span class="k">break</span>;
+                <span class="k">case</span> <span class="n">2</span>: <span class="f">deposit</span>(); <span class="k">break</span>;
+                <span class="k">case</span> <span class="n">3</span>: <span class="f">withdraw</span>(); <span class="k">break</span>;
+                <span class="k">case</span> <span class="n">4</span>: <span class="f">selectAccount</span>(); <span class="k">break</span>;
+                <span class="k">case</span> <span class="n">5</span>:
+                    <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"프로그램을 종료합니다."</span>);
+                    run = <span class="k">false</span>;
+                    <span class="k">break</span>;
+                <span class="k">default</span>:
+                    <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"지원되지 않는 기능입니다."</span>);
+                    <span class="k">break</span>;
+            }
+        }
+    }</pre>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 ⑤ Main — 계좌 생성 · 계좌 검색</div>
+<pre>    <span class="c">// 계좌 생성</span>
+    <span class="k">private static</span> <span class="k">void</span> <span class="f">createAccount</span>() {
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"========================================="</span>);
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"               계  좌  생  성            "</span>);
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"========================================="</span>);
+        <span class="k">while</span> (<span class="k">true</span>) {
+            <span class="k">try</span> {
+                <span class="t">System</span>.out.<span class="f">print</span>(<span class="s">"계좌 번호 입력: "</span>);
+                <span class="t">String</span> accNum = scan.<span class="f">nextLine</span>();
+                <span class="k">if</span> (<span class="f">searchAccount</span>(accNum) != <span class="k">null</span>) {
+                    <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"이미 등록된 계좌입니다. 다른 계좌를 입력하세요."</span>);
+                } <span class="k">else</span> {
+                    <span class="t">System</span>.out.<span class="f">print</span>(<span class="s">"계좌주 입력: "</span>);
+                    <span class="t">String</span> name = scan.<span class="f">nextLine</span>();
+                    <span class="t">BankAccount</span> newAccount = <span class="k">new</span> <span class="t">BankAccount</span>(accNum, name);   <span class="c">// 신규 계좌 생성</span>
+                    accountList.<span class="f">add</span>(newAccount);
+                    <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"계좌가 생성되었습니다.(계좌 번호: "</span> + accNum + <span class="s">")"</span>);
+                    <span class="k">break</span>;
+                }
+            } <span class="k">catch</span> (<span class="t">IllegalArgumentException</span> e) {
+                <span class="t">System</span>.out.<span class="f">println</span>(e.<span class="f">getMessage</span>());
+            }
+        }
+    }
+
+    <span class="c">// 계좌 검색</span>
+    <span class="k">private static</span> <span class="t">BankAccount</span> <span class="f">searchAccount</span>(<span class="t">String</span> accNum) {
+        <span class="t">BankAccount</span> account = <span class="k">null</span>;
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; accountList.<span class="f">size</span>(); i++) {
+            <span class="t">String</span> dbAccNum = accountList.<span class="f">get</span>(i).<span class="f">getAccountNumber</span>();
+            <span class="k">if</span> (dbAccNum.<span class="f">equals</span>(accNum)) {   <span class="c">// 계좌 번호가 일치하면</span>
+                account = accountList.<span class="f">get</span>(i);   <span class="c">// 계좌 인스턴스 저장</span>
+                <span class="k">break</span>;
+            }
+        }
+        <span class="k">return</span> account;
+    }</pre>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 ⑥ Main — 예금 · 출금 · 계좌 정보 검색</div>
+<pre>    <span class="c">// 예금</span>
+    <span class="k">private static</span> <span class="k">void</span> <span class="f">deposit</span>() {
+        <span class="c">// (구분선·"예금" 헤더 출력 생략)</span>
+        <span class="k">while</span> (<span class="k">true</span>) {
+            <span class="t">System</span>.out.<span class="f">print</span>(<span class="s">"계좌 번호 입력: "</span>);
+            <span class="t">String</span> accNum = scan.<span class="f">nextLine</span>();
+            <span class="t">System</span>.out.<span class="f">print</span>(<span class="s">"입금액 입력: "</span>);
+            <span class="k">int</span> amount = <span class="t">Integer</span>.<span class="f">parseInt</span>(scan.<span class="f">nextLine</span>());
+            <span class="k">if</span> (<span class="f">searchAccount</span>(accNum) != <span class="k">null</span>) {
+                <span class="t">BankAccount</span> account = <span class="f">searchAccount</span>(accNum);
+                <span class="k">if</span> (amount &lt; <span class="n">0</span>) {
+                    <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"유효한 금액을 입력하세요."</span>);
+                } <span class="k">else</span> {
+                    account.<span class="f">setBalance</span>(account.<span class="f">getBalance</span>() + amount);
+                    <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"입금이 정상 처리 되었습니다. 현재 잔액: "</span> + account.<span class="f">getBalance</span>());
+                    account.<span class="f">addTransaction</span>(<span class="t">TransactionType</span>.입금, amount);   <span class="c">// 입금 거래 추가</span>
+                    <span class="k">break</span>;
+                }
+            } <span class="k">else</span> {
+                <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"계좌가 없습니다."</span>);
+            }
+        }
+    }
+
+    <span class="c">// 출금</span>
+    <span class="k">private static</span> <span class="k">void</span> <span class="f">withdraw</span>() {
+        <span class="k">while</span> (<span class="k">true</span>) {
+            <span class="t">System</span>.out.<span class="f">print</span>(<span class="s">"계좌 번호 입력: "</span>);
+            <span class="t">String</span> accNum = scan.<span class="f">nextLine</span>();
+            <span class="t">System</span>.out.<span class="f">print</span>(<span class="s">"출금액 입력: "</span>);
+            <span class="k">int</span> amount = <span class="t">Integer</span>.<span class="f">parseInt</span>(scan.<span class="f">nextLine</span>());
+            <span class="k">if</span> (<span class="f">searchAccount</span>(accNum) != <span class="k">null</span>) {
+                <span class="t">BankAccount</span> account = <span class="f">searchAccount</span>(accNum);
+                <span class="k">if</span> (amount &lt; <span class="n">0</span>) {
+                    <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"유효한 금액을 입력하세요."</span>);
+                } <span class="k">else if</span> (amount &gt; account.<span class="f">getBalance</span>()) {
+                    <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"잔액이 부족합니다."</span>);
+                } <span class="k">else</span> {
+                    account.<span class="f">setBalance</span>(account.<span class="f">getBalance</span>() - amount);
+                    <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"출금이 정상 처리 되었습니다. 현재 잔액: "</span> + account.<span class="f">getBalance</span>());
+                    account.<span class="f">addTransaction</span>(<span class="t">TransactionType</span>.출금, amount);   <span class="c">// 출금 거래 추가</span>
+                    <span class="k">break</span>;
+                }
+            } <span class="k">else</span> {
+                <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"계좌가 없습니다."</span>);
+            }
+        }
+    }
+
+    <span class="c">// 계좌 정보 검색</span>
+    <span class="k">private static</span> <span class="k">void</span> <span class="f">selectAccount</span>() {
+        <span class="k">while</span> (<span class="k">true</span>) {
+            <span class="t">System</span>.out.<span class="f">print</span>(<span class="s">"조회할 계좌번호 입력: "</span>);
+            <span class="t">String</span> accNum = scan.<span class="f">nextLine</span>();
+            <span class="k">if</span> (<span class="f">searchAccount</span>(accNum) != <span class="k">null</span>) {
+                <span class="t">BankAccount</span> account = <span class="f">searchAccount</span>(accNum);
+                account.<span class="f">displayInfo</span>();
+                account.<span class="f">getTransactionHistory</span>();
+                <span class="k">break</span>;
+            } <span class="k">else</span> {
+                <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"계좌가 없습니다. 다시 입력하세요"</span>);
+            }
+        }
+    }
+}</pre>
+      <div class="out">=========================================<br>1.계좌 생성 | 2.예금 | 3.출금 | 4.계좌 검색 | 5.종료<br>=========================================<br>선택> 4<br>조회할 계좌번호 입력: 100-200-3000<br>계좌 정보<br>&nbsp;&nbsp;&nbsp;계좌 번호: 100-200-3000<br>&nbsp;&nbsp;&nbsp;계좌주: kim<br>&nbsp;&nbsp;&nbsp;잔고: 5000<br>&nbsp;|입금| 10000원<br>&nbsp;|출금| 5000원</div>
+    </div>
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 8-8. 기능 확장</h4>
+      <p>이 프로그램에 "6.계좌 삭제" 메뉴를 추가하려면 어떤 컬렉션 메서드를 쓰면 될까요? 그리고 삭제 전 확인해야 할 것은?</p>
+      <details><summary>정답 보기</summary>
+        <p class="muted"><code>accountList.remove(account)</code>(또는 인덱스)로 삭제한다. 삭제 전 <code>searchAccount()</code>로 계좌가 존재하는지 확인해야 하고, 잔액이 남아 있으면 경고하는 로직을 넣으면 더 안전하다.</p>
+      </details>
+    </div>
+  </section>
+
+  <footer>8장. 컬렉션(List, Set, Map) · 학습 교안<br>모듈별 학습목표 · 개념 · 예제 · 실습문제 구성</footer>
+</div>
+</body>
+</html>

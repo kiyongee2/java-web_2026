@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7장. 회원 및 게시판 관리</title><style>
+:root{--navy:#1e3a5f;--blue:#2b6cb0;--sky:#e8f2fb;--accent:#e07b00;--ink:#1f2933;--muted:#5b6875;--line:#d7e0ea;--code-bg:#1e293b;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:"Malgun Gothic","맑은 고딕",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);line-height:1.7;background:#f4f6f9;}
+.wrap{max-width:960px;margin:0 auto;background:#fff;box-shadow:0 0 30px rgba(0,0,0,.06);}
+.cover{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:78px 50px;text-align:center;}
+.cover .eyebrow{font-size:15px;letter-spacing:4px;opacity:.85;margin-bottom:18px;}
+.cover h1{font-size:36px;margin:0 0 14px;font-weight:800;line-height:1.3;}
+.cover .sub{font-size:17px;opacity:.9;letter-spacing:1px;}
+.topbar{background:var(--navy);padding:11px 50px;border-bottom:1px solid rgba(255,255,255,.1);}
+.topbar a{color:#cbd5e1;text-decoration:none;font-size:13px;}.topbar a:hover{color:#fff;}
+main{padding:16px 50px 60px;}
+section{padding:26px 0;border-bottom:1px solid var(--line);}
+section:last-child{border-bottom:none;}
+.ch-num{display:inline-block;background:#eef2f7;color:var(--muted);font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:20px;letter-spacing:.5px;margin-bottom:10px;}
+h2.title{font-size:23px;color:var(--navy);margin:6px 0 14px;font-weight:800;border-left:6px solid var(--accent);padding-left:14px;}
+h3{font-size:18px;color:var(--blue);margin:22px 0 8px;font-weight:700;}
+h4{font-size:15.5px;color:var(--navy);margin:16px 0 4px;font-weight:700;}
+p{margin:8px 0;}
+ul{margin:8px 0;padding-left:22px;}li{margin:5px 0;}
+code.inline{background:#eef2f7;color:#b23;padding:2px 7px;border-radius:5px;font-family:Consolas,Menlo,monospace;font-size:13px;}
+pre{background:var(--code-bg);color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;font-family:Consolas,Menlo,monospace;font-size:12.8px;line-height:1.55;white-space:pre;}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px;}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top;}
+th{background:var(--navy);color:#fff;font-weight:600;}
+tbody tr:nth-child(even){background:#f7fafc;}
+figure{margin:18px 0;text-align:center;}
+figure img{max-width:100%;border:1px solid var(--line);border-radius:8px;box-shadow:0 3px 12px rgba(0,0,0,.08);}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:6px;}
+@media(max-width:700px){main,.cover,.topbar{padding-left:20px;padding-right:20px;}}
+footer{background:var(--navy);color:#cbd5e1;text-align:center;padding:22px;font-size:13px;}
+</style></head><body><div class="wrap">
+<div class="topbar"><a href="목차.html">← 전체 목차</a></div>
+<div class="cover"><div class="eyebrow">JAVA 웹 &amp; JSP</div><h1>7장. 회원 및 게시판 관리</h1><div class="sub">회원 관리 · 게시판 구현</div></div>
+<main>
+<section><span class="ch-num">슬라이드 2</span><h2 class="title">회원 관리 프로젝트</h2>
+<h4>회원관리 프로젝트</h4>
+<ul><li>프로젝트 이름 : Members java web</li></ul>
+<figure><img src="ch7_img/page02.png" alt="슬라이드 2"><figcaption>슬라이드 2 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 3</span><h2 class="title">Maven 기반 프로젝트</h2>
+<p>1. 프로젝트 &gt; 우클릭 &gt; configure &gt; Convert to Maven Project 2. pox.xml 에 &lt;dependencies&gt; 의존성 관리 (3개 추가)</p>
+<figure><img src="ch7_img/page03.png" alt="슬라이드 3"><figcaption>슬라이드 3 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 4</span><h2 class="title">회원 관리 프로젝트</h2>
+<h4>계층적 구조</h4>
+<p>데이터베이스 웹브라우저 뷰 컨트롤러 데이터 모델 (DTO) 요청 응답 서비스(Service) DAO(Repository)</p>
+</section><section><span class="ch-num">슬라이드 5</span>
+<h4>인덱스 페이지</h4>
+<figure><img src="ch7_img/page05.png" alt="슬라이드 5"><figcaption>슬라이드 5 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 6</span>
+<h4>인덱스 페이지</h4>
+<figure><img src="ch7_img/page06.png" alt="슬라이드 6"><figcaption>슬라이드 6 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 7</span>
+<h4>style.css</h4>
+<figure><img src="ch7_img/page07.png" alt="슬라이드 7"><figcaption>슬라이드 7 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 8</span>
+<h4>style.css</h4>
+<figure><img src="ch7_img/page08.png" alt="슬라이드 8"><figcaption>슬라이드 8 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 9</span>
+<h4>MemberDTO</h4>
+<figure><img src="ch7_img/page09.png" alt="슬라이드 9"><figcaption>슬라이드 9 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 10</span>
+<h4>MemberDTO</h4>
+<figure><img src="ch7_img/page10.png" alt="슬라이드 10"><figcaption>슬라이드 10 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 11</span>
+<h4>MemberDTO</h4>
+<figure><img src="ch7_img/page11.png" alt="슬라이드 11"><figcaption>슬라이드 11 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 12</span>
+<h4>jspdb &gt; Member 테이블</h4>
+<figure><img src="ch7_img/page12.png" alt="슬라이드 12"><figcaption>슬라이드 12 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 13</span>
+<h4>JDBC 연결 테스트</h4>
+<figure><img src="ch7_img/page13.png" alt="슬라이드 13"><figcaption>슬라이드 13 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 14</span>
+<h4>DBUtil 클래스</h4>
+<figure><img src="ch7_img/page14.png" alt="슬라이드 14"><figcaption>슬라이드 14 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 15</span>
+<h4>MemberDAO – 회원 가입</h4>
+<figure><img src="ch7_img/page15.png" alt="슬라이드 15"><figcaption>슬라이드 15 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 16</span>
+<h4>MemberDAO – 회원 목록</h4>
+<figure><img src="ch7_img/page16.png" alt="슬라이드 16"><figcaption>슬라이드 16 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 17</span>
+<h4>MemberDAO – 회원 상세(정보)</h4>
+<figure><img src="ch7_img/page17.png" alt="슬라이드 17"><figcaption>슬라이드 17 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 18</span>
+<h4>MemberDAO – 로그인</h4>
+<figure><img src="ch7_img/page18.png" alt="슬라이드 18"><figcaption>슬라이드 18 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 19</span>
+<h4>회원 가입</h4>
+<figure><img src="ch7_img/page19.png" alt="슬라이드 19"><figcaption>슬라이드 19 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 20</span>
+<h4>addMember.jsp</h4>
+<figure><img src="ch7_img/page20.png" alt="슬라이드 20"><figcaption>슬라이드 20 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 21</span>
+<h4>addMember.jsp</h4>
+<figure><img src="ch7_img/page21.png" alt="슬라이드 21"><figcaption>슬라이드 21 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 22</span>
+<h4>회원 목록</h4>
+<figure><img src="ch7_img/page22.png" alt="슬라이드 22"><figcaption>슬라이드 22 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 23</span>
+<h4>memberList.jsp</h4>
+<figure><img src="ch7_img/page23.png" alt="슬라이드 23"><figcaption>슬라이드 23 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 24</span>
+<h4>memberList.jsp</h4>
+<figure><img src="ch7_img/page24.png" alt="슬라이드 24"><figcaption>슬라이드 24 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 25</span>
+<h4>회원 상세 보기</h4>
+<figure><img src="ch7_img/page25.png" alt="슬라이드 25"><figcaption>슬라이드 25 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 26</span>
+<h4>memberInfo.jsp</h4>
+<figure><img src="ch7_img/page26.png" alt="슬라이드 26"><figcaption>슬라이드 26 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 27</span>
+<h4>로그인</h4>
+<figure><img src="ch7_img/page27.png" alt="슬라이드 27"><figcaption>슬라이드 27 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 28</span>
+<h4>login.jsp</h4>
+<figure><img src="ch7_img/page28.png" alt="슬라이드 28"><figcaption>슬라이드 28 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 29</span>
+<h4>MemberService – 서비스 계층</h4>
+<figure><img src="ch7_img/page29.png" alt="슬라이드 29"><figcaption>슬라이드 29 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 30</span>
+<h4>MemberController – 서블릿</h4>
+<figure><img src="ch7_img/page30.png" alt="슬라이드 30"><figcaption>슬라이드 30 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 31</span>
+<h4>MemberController – 서블릿</h4>
+<figure><img src="ch7_img/page31.png" alt="슬라이드 31"><figcaption>슬라이드 31 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 32</span>
+<h4>MemberController – 서블릿</h4>
+<figure><img src="ch7_img/page32.png" alt="슬라이드 32"><figcaption>슬라이드 32 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 33</span>
+<h4>MemberController – 서블릿</h4>
+<figure><img src="ch7_img/page33.png" alt="슬라이드 33"><figcaption>슬라이드 33 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 34</span><h2 class="title">게시판 관리 프로젝트</h2>
+<h4>인덱스 페이지</h4>
+<figure><img src="ch7_img/page34.png" alt="슬라이드 34"><figcaption>슬라이드 34 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 35</span>
+<h4>BoardDTO</h4>
+<figure><img src="ch7_img/page35.png" alt="슬라이드 35"><figcaption>슬라이드 35 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 36</span>
+<h4>BoardDTO</h4>
+<figure><img src="ch7_img/page36.png" alt="슬라이드 36"><figcaption>슬라이드 36 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 37</span>
+<h4>MySQL - 테이블</h4>
+<figure><img src="ch7_img/page37.png" alt="슬라이드 37"><figcaption>슬라이드 37 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 38</span>
+<h4>BoardDAO – 글 목록 보기</h4>
+<figure><img src="ch7_img/page38.png" alt="슬라이드 38"><figcaption>슬라이드 38 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 39</span>
+<h4>BoardDAO – 글 등록</h4>
+<figure><img src="ch7_img/page39.png" alt="슬라이드 39"><figcaption>슬라이드 39 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 40</span>
+<h4>BoardDAO – 글 상세 보기</h4>
+<figure><img src="ch7_img/page40.png" alt="슬라이드 40"><figcaption>슬라이드 40 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 41</span>
+<h4>BoardService – 서비스 계층</h4>
+<figure><img src="ch7_img/page41.png" alt="슬라이드 41"><figcaption>슬라이드 41 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 42</span>
+<h4>BoardController – 컨트롤러 계층</h4>
+<figure><img src="ch7_img/page42.png" alt="슬라이드 42"><figcaption>슬라이드 42 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 43</span>
+<h4>BoardController – 컨트롤러 계층</h4>
+<figure><img src="ch7_img/page43.png" alt="슬라이드 43"><figcaption>슬라이드 43 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 44</span>
+<h4>BoardController – 컨트롤러 계층</h4>
+<figure><img src="ch7_img/page44.png" alt="슬라이드 44"><figcaption>슬라이드 44 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 45</span>
+<h4>게시글 목록</h4>
+<figure><img src="ch7_img/page45.png" alt="슬라이드 45"><figcaption>슬라이드 45 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 46</span>
+<h4>게시글 목록</h4>
+<figure><img src="ch7_img/page46.png" alt="슬라이드 46"><figcaption>슬라이드 46 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 47</span>
+<h4>게시글 목록</h4>
+<figure><img src="ch7_img/page47.png" alt="슬라이드 47"><figcaption>슬라이드 47 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 48</span>
+<h4>게시글 등록</h4>
+<p>글쓰기는 로그인한 회원만 가능함</p>
+<figure><img src="ch7_img/page48.png" alt="슬라이드 48"><figcaption>슬라이드 48 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 49</span>
+<h4>게시글 등록</h4>
+<figure><img src="ch7_img/page49.png" alt="슬라이드 49"><figcaption>슬라이드 49 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 50</span>
+<h4>게시글 등록</h4>
+<figure><img src="ch7_img/page50.png" alt="슬라이드 50"><figcaption>슬라이드 50 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 51</span>
+<h4>게시글 등록</h4>
+<figure><img src="ch7_img/page51.png" alt="슬라이드 51"><figcaption>슬라이드 51 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 52</span>
+<h4>게시글 상세 보기</h4>
+<figure><img src="ch7_img/page52.png" alt="슬라이드 52"><figcaption>슬라이드 52 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 53</span>
+<h4>게시글 상세 보기</h4>
+<figure><img src="ch7_img/page53.png" alt="슬라이드 53"><figcaption>슬라이드 53 — 코드·실행 화면</figcaption></figure>
+</section><section><span class="ch-num">슬라이드 54</span>
+<h4>게시글 상세 보기</h4>
+<figure><img src="ch7_img/page54.png" alt="슬라이드 54"><figcaption>슬라이드 54 — 코드·실행 화면</figcaption></figure>
+</section>
+</main>
+<footer>7장. 회원 및 게시판 관리 · JAVA 웹 &amp; JSP 강의 교안</footer>
+</div></body></html>

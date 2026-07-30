@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: javadb-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: javadb
+      MYSQL_USER: javauser
+      MYSQL_PASSWORD: pwjava
+      TZ: Asia/Seoul
+    ports:
+      - "3306:3306" # 로컬 MySQL을 끄고 사용하세요. 충돌 시 "3307:3306"으로 변경
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - javadb-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "javauser", "-ppwjava"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  javadb-data:
