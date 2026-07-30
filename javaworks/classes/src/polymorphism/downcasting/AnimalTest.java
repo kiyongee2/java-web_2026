@@ -41,7 +41,10 @@ public class AnimalTest {
 		}
 		
 		System.out.println("=== 원래 형으로 다운캐스팅 ===");
-		
+		downCasting(); //호출
+	}
+	
+	public static void downCasting() {
 		for(int i=0; i<animals.length; i++) {
 			Animal animal = animals[i];
 			if(animal instanceof Human) {
