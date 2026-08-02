@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CarTest",
+            "request": "launch",
+            "mainClass": "classes/inheritance.car.CarTest",
+            "projectName": "classes"
+        },
+        {
+            "type": "java",
+            "name": "BookTest",
+            "request": "launch",
+            "mainClass": "classes/basic_classes.BookTest",
+            "projectName": "classes"
+        },
+        {
+            "type": "java",
+            "name": "BookTest",
+            "request": "launch",
+            "mainClass": "basic_classes.BookTest",
+            "projectName": "classes"
+        }
+    ]
+}
