@@ -21,7 +21,7 @@ public class SaleStatement {
 		int total = 0;
 		total = coffee.calcPrice() + tea.calcPrice() + 
 				+ beer.calcPrice() + soju.calcPrice();
-		System.out.println("***** 합계 금액: " + total + "원 *****");
+		System.out.println("********** 합계 금액: " + total + "원 **********");
 		
 	}
 }
