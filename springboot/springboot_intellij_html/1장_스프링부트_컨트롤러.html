@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1장. 스프링부트 · 컨트롤러 — 학습 교안</title>
+<style>
+  :root{--bg:#f4f6f9;--card:#fff;--ink:#1f2933;--muted:#52606d;--line:#e4e7eb;--accent:#6db33f;--accent2:#2c3e50;--code-bg:#282c34;--goal:#eafaf1;--goal-line:#27ae60;--ex:#eef4ff;--ex-line:#5b8def;--lab:#fff5e9;--lab-line:#e76f00;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Malgun Gothic","맑은 고딕",-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.75;}
+  header.hero{background:linear-gradient(135deg,#6db33f,#2c3e50);color:#fff;padding:52px 24px;text-align:center;}
+  header.hero .eyebrow{letter-spacing:3px;font-size:.78rem;opacity:.9;text-transform:uppercase}
+  header.hero h1{margin:12px 0 8px;font-size:1.9rem}header.hero p{margin:0;opacity:.92}
+  header.hero .tags{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  header.hero .tags span{background:rgba(255,255,255,.16);border-radius:999px;padding:5px 13px;font-size:.82rem}
+  .wrap{max-width:920px;margin:0 auto;padding:32px 20px 80px}
+  nav.toc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin-bottom:34px;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+  nav.toc h2{margin:0 0 12px;font-size:1.05rem;color:var(--accent2)}
+  nav.toc ol{margin:0;padding-left:22px;columns:2;column-gap:34px}
+  nav.toc a{color:var(--ink);text-decoration:none}nav.toc a:hover{color:var(--accent);text-decoration:underline}
+  section.module{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 30px;margin-bottom:26px;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+  section.module > h2{margin:0 0 6px;font-size:1.4rem;color:var(--accent2);display:flex;align-items:center;gap:12px;}
+  section.module > h2 .num{background:var(--accent);color:#fff;font-size:.95rem;font-weight:800;padding:4px 12px;border-radius:10px;min-width:38px;text-align:center;}
+  h3.blk{font-size:1.02rem;margin:22px 0 8px;font-weight:800}
+  .goal{background:var(--goal);border-left:5px solid var(--goal-line);border-radius:0 10px 10px 0;padding:14px 20px;margin:14px 0}
+  .goal .lbl{font-weight:800;color:#1e874b}.goal ul{margin:8px 0 0}
+  .concept h3.blk{color:var(--ink);border-left:4px solid var(--accent);padding-left:10px}
+  .ex{background:var(--ex);border-left:5px solid var(--ex-line);border-radius:0 10px 10px 0;padding:14px 20px;margin:16px 0}
+  .ex .lbl{font-weight:800;color:#2f5fc7}
+  .lab{background:var(--lab);border-left:5px solid var(--lab-line);border-radius:0 10px 10px 0;padding:14px 20px;margin:16px 0}
+  .lab .lbl{font-weight:800;color:#c85f00}.lab h4{margin:6px 0 6px;font-size:.98rem}
+  .note{background:#fffbea;border-left:5px solid #f0c000;border-radius:0 10px 10px 0;padding:12px 18px;margin:14px 0}
+  .note .lbl{font-weight:800;color:#a67c00}
+  ul{margin:8px 0}li{margin:5px 0}.muted{color:var(--muted)}
+  code{background:#eceef1;padding:2px 6px;border-radius:5px;font-size:.92em;font-family:Consolas,"D2Coding",monospace}
+  pre{background:var(--code-bg);color:#abb2bf;border-radius:10px;padding:16px 18px;overflow-x:auto;font-family:Consolas,"D2Coding",monospace;font-size:.9rem;line-height:1.6;margin:10px 0}
+  pre .k{color:#c678dd}pre .t{color:#e5c07b}pre .s{color:#98c379}pre .c{color:#7f848e;font-style:italic}pre .f{color:#61afef}pre .n{color:#d19a66}pre .g{color:#56b6c2}pre .a{color:#e06c75}
+  .out{background:#1b1e24;color:#9fd18a;border-radius:8px;padding:10px 14px;font-family:Consolas,"D2Coding",monospace;font-size:.86rem;margin:6px 0 0}
+  .browser{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:6px 0 0;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+  .browser .bar{background:#e9edf2;padding:7px 12px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--line)}
+  .browser .bar i{width:11px;height:11px;border-radius:50%;display:inline-block}
+  .browser .bar .r{background:#ff5f57}.browser .bar .y{background:#febc2e}.browser .bar .gr{background:#28c840}
+  .browser .bar .url{margin-left:8px;background:#fff;border-radius:6px;padding:3px 10px;font-size:.78rem;color:var(--muted);font-family:Consolas,monospace;flex:1}
+  .browser .page{padding:16px 18px;font-size:.95rem}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.93rem}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:#f0f4f8;color:var(--accent2)}td.c,th.c{text-align:center}
+  details{margin-top:10px;background:#fff;border:1px solid #f0d9bf;border-radius:8px;padding:8px 14px}
+  details summary{cursor:pointer;font-weight:700;color:#c85f00}details pre{margin-top:10px}
+  .steps{counter-reset:step;list-style:none;padding-left:0;margin:10px 0}
+  .steps li{position:relative;padding-left:40px;margin:11px 0}
+  .steps li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:-1px;width:26px;height:26px;background:var(--ex-line);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+  figure{margin:14px 0;text-align:center}
+  figure img{max-width:100%;border:1px solid var(--line);border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.07);background:#fff}
+  figure figcaption{font-size:.83rem;color:var(--muted);margin-top:7px}
+  .imgrow{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;align-items:flex-start}
+  .imgrow figure{flex:1 1 300px;margin:8px 0}
+  footer{text-align:center;color:var(--muted);font-size:.85rem;padding:30px 20px}
+  .pill{display:inline-block;background:#eceef1;border-radius:6px;padding:2px 9px;margin:2px;font-size:.85rem}
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin:16px 0;justify-content:center}
+  .flow .box{flex:1 1 150px;background:#f0f4f8;border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-align:center}
+  .flow .box b{display:block;color:var(--accent2)}
+  .flow .box small{color:var(--muted)}
+  .flow .arr{display:flex;align-items:center;color:var(--accent);font-weight:800;font-size:1.2rem}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="eyebrow">Java 웹 &amp; Spring Boot · Chapter 01 · 학습 교안</div>
+  <h1>스프링부트 개발 환경 &amp; 컨트롤러</h1>
+  <p>JDK · IntelliJ IDEA · 프로젝트 생성부터 스프링 MVC 컨트롤러 어노테이션까지</p>
+  <div class="tags"><span>🍃 스프링부트 개념</span><span>⚙️ 개발환경</span><span>📦 프로젝트 생성</span><span>🖥️ Controller · Thymeleaf</span><span>🔀 스프링 MVC</span><span>✍️ 실습문제(정답 포함)</span></div>
+</header>
+<div class="wrap">
+  <nav class="toc">
+    <h2>📚 학습 목차</h2>
+    <ol>
+      <li><a href="#m1">스프링부트란? (개념 · 특징)</a></li>
+      <li><a href="#m2">개발 환경 구축(JDK · IntelliJ)</a></li>
+      <li><a href="#m3">실습 프로젝트 생성(jwboot)</a></li>
+      <li><a href="#m4">정적 파일 &amp; 정적 페이지(static)</a></li>
+      <li><a href="#m5">메인 페이지 만들기(Controller)</a></li>
+      <li><a href="#m6">스프링 MVC &amp; 컨트롤러 어노테이션</a></li>
+    </ol>
+  </nav>
+
+  <!-- ================= MODULE 1 ================= -->
+  <section class="module" id="m1">
+    <h2><span class="num">1</span> 스프링부트란? (개념 · 특징)</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>스프링부트가 무엇인지, 스프링 프레임워크와의 관계를 설명할 수 있다.</li>
+      <li>스프링부트의 4가지 핵심 특징을 구분해 말할 수 있다.</li>
+    </ul></div>
+
+    <div class="concept"><h3 class="blk">📖 스프링부트(Spring Boot)란?</h3>
+      <p><b>스프링부트 = 스프링(Spring) + 부트(Boot)</b>. 스프링 프레임워크의 서브 프로젝트로 만들어졌으며, 이름 그대로 <b>스프링</b>과 <b>부트</b>의 합성어입니다.</p>
+      <ul>
+        <li><b>부트(Boot)</b> : "컴퓨터를 부팅한다"는 말처럼 <b>시스템을 바로 사용 가능한 상태로 만드는 것</b>을 의미</li>
+        <li>웹 애플리케이션을 <b>빠르게 제작·출시</b>할 수 있는 경량 오픈소스 프레임워크</li>
+        <li>2014년 무렵 출시, 점차 스프링에 비해 사용이 늘어나는 추세</li>
+      </ul>
+    </div>
+
+    <div class="concept"><h3 class="blk">📖 스프링부트의 특징 4가지</h3>
+      <table>
+        <tr><th>특징</th><th>설명</th></tr>
+        <tr><td><b>① 라이브러리 관리 자동화</b></td><td>기존엔 <code>Maven</code>/<code>Gradle</code>로 의존성을 직접 관리했으나, 부트는 <span class="pill">스타터(Starter)</span>로 특정 기능에 필요한 라이브러리 의존성을 <b>간단히</b> 처리</td></tr>
+        <tr><td><b>② 설정의 자동화</b></td><td>프로젝트에 추가된 라이브러리를 <b>인지</b>해, 실행에 필요한 스프링 설정을 <b>자동으로</b> 처리(Auto Configuration)</td></tr>
+        <tr><td><b>③ 테스트 환경 · 내장 서버(톰캣)</b></td><td>JUnit 등 테스트 라이브러리 기본 포함. <b>톰캣을 내장</b>하여 <code>main()</code> 메소드 실행만으로 구동 → 결과를 빠르게 확인</td></tr>
+        <tr><td><b>④ 독립 실행 가능한 JAR</b></td><td>운영 서버 배포를 위한 패키징 시 <code>WAR</code>가 아닌 <b><code>JAR</code> 파일</b>로 패키징 가능</td></tr>
+      </table>
+      <div class="note"><span class="lbl">💡 핵심</span> &nbsp;"복잡한 설정을 줄이고(Auto Config), 톰캣을 내장해 <b>바로 실행</b>되는 스프링" — 이것이 스프링부트의 존재 이유입니다.</div>
+    </div>
+  </section>
+
+  <!-- ================= MODULE 2 ================= -->
+  <section class="module" id="m2">
+    <h2><span class="num">2</span> 개발 환경 구축 (JDK · IntelliJ)</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>스프링부트 개발에 필요한 도구(JDK · IntelliJ IDEA)를 설치할 수 있다.</li>
+      <li>환경 변수(JAVA_HOME · Path)를 설정할 수 있다.</li>
+      <li>IntelliJ IDEA에서 스프링부트 프로젝트를 생성하고 실행하는 과정을 설명할 수 있다.</li>
+    </ul></div>
+
+    <div class="lab"><div class="lbl">🛠️ 따라하기 ① JDK 설치</div>
+      <ol class="steps">
+        <li>오라클 Java 다운로드 페이지 접속(검색)</li>
+        <li>Windows → <b>Java SE 21</b> 선택</li>
+        <li><b>x64 Installer</b> 다운로드 후 설치</li>
+      </ol>
+    </div>
+
+    <div class="lab"><div class="lbl">🛠️ 따라하기 ② 환경 변수 설정</div>
+      <ol class="steps">
+        <li>시스템 변수 → <b>새로 만들기</b> → <code>JAVA_HOME</code> 생성 (값: JDK 설치 경로)</li>
+        <li>시스템 변수 → <code>Path</code> → <code>%JAVA_HOME%\bin</code> 추가</li>
+      </ol>
+      <div class="note"><span class="lbl">⚠️ 확인</span> &nbsp;설정 후 명령 프롬프트에서 <code>java -version</code> 으로 정상 설치를 확인합니다.</div>
+    </div>
+
+    <div class="lab"><div class="lbl">🛠️ 따라하기 ③ IntelliJ IDEA 설치</div>
+      <p><b>IntelliJ IDEA</b>는 JetBrains의 대표 자바 IDE로, 스프링부트 개발에 널리 사용됩니다.</p>
+      <ol class="steps">
+        <li>JetBrains 다운로드 페이지 접속: <code>https://www.jetbrains.com/idea/download</code></li>
+        <li><b>Windows</b> 버전 선택 — <b>Ultimate</b>(유료·30일 체험) 또는 <b>Community</b>(무료) 다운로드</li>
+        <li>설치 관리자 실행 후 안내에 따라 설치</li>
+      </ol>
+      <div class="note"><span class="lbl">💡 Ultimate vs Community</span> &nbsp;<b>Ultimate</b>는 Spring·Spring Boot·DB 도구가 기본 내장됩니다. 무료 <b>Community</b>로도 실습이 가능합니다.</div>
+      </div>
+
+    <div class="lab"><div class="lbl">🛠️ 따라하기 ④ 플러그인 · SDK 확인</div>
+      <ul>
+        <li><b>HTML·CSS·JavaScript</b> 지원은 IntelliJ에 <b>기본 내장</b>되어 별도 설치가 필요 없습니다.</li>
+        <li><b>Lombok</b>도 최신 IntelliJ에 기본 포함됩니다. (구버전은 <code>Settings → Plugins</code>에서 <b>Lombok</b> 설치)</li>
+        <li><code>Settings → Build, Execution, Deployment → Compiler → Annotation Processors</code>에서 <b>Enable annotation processing</b> 체크</li>
+      </ul>
+      <div class="note"><span class="lbl">⚠️ SDK 지정</span> &nbsp;프로젝트 생성 시 <b>Project SDK</b>를 설치한 <b>JDK 21</b>로 지정해야 합니다.</div>
+    </div>
+  </section>
+
+  <!-- ================= MODULE 3 ================= -->
+  <section class="module" id="m3">
+    <h2><span class="num">3</span> 실습 프로젝트 생성 (jwboot)</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>IntelliJ의 Spring Initializr로 스프링부트 프로젝트를 생성할 수 있다.</li>
+      <li>필요한 스타터(모듈)를 선택해 의존성을 추가할 수 있다.</li>
+      <li>프로젝트 구조를 이해하고 애플리케이션을 실행할 수 있다.</li>
+    </ul></div>
+
+    <div class="lab"><div class="lbl">🛠️ 따라하기 ① 프로젝트 생성</div>
+      <p>메뉴: <code>[File] → [New] → [Project…]</code> → 왼쪽 목록에서 <b>Spring Boot</b>(Spring Initializr) 선택</p>
+      <table>
+        <tr><th>항목</th><th>값</th></tr>
+        <tr><td>Name</td><td><code>jwboot</code></td></tr>
+        <tr><td>Type</td><td><b>Maven</b></td></tr>
+        <tr><td>Packaging</td><td><b>Jar</b></td></tr>
+        <tr><td>Java Version</td><td><b>21</b></td></tr>
+        <tr><td>Group</td><td><code>com.space</code></td></tr>
+        <tr><td>Package</td><td><code>com.space</code></td></tr>
+      </table>
+      <div class="note"><span class="lbl">💡 Community 에디션은?</span> &nbsp;Spring Boot 생성 마법사는 <b>Ultimate</b>(및 최신 Community)에 있습니다. 없다면 <code>https://start.spring.io</code>에서 동일한 항목으로 생성해 zip을 받은 뒤 <code>[File] → [Open]</code>으로 열면 됩니다.</div>
+    </div>
+
+    <div class="lab"><div class="lbl">🛠️ 따라하기 ② 모듈(스타터) 추가</div>
+      <p>생성 마법사의 <b>Dependencies</b> 단계에서 다음 4개 의존성을 추가합니다. Spring Boot Version은 <b>3.4.10</b>을 선택합니다.</p>
+      <p><span class="pill">Lombok</span><span class="pill">Spring Web</span><span class="pill">Spring Boot DevTools</span><span class="pill">Thymeleaf</span></p>
+      <table>
+        <tr><th>모듈</th><th>역할</th></tr>
+        <tr><td>Lombok</td><td>Getter/Setter 등 반복 코드를 어노테이션으로 자동 생성</td></tr>
+        <tr><td>Spring Web</td><td>웹(MVC) 개발 + 내장 톰캣 포함</td></tr>
+        <tr><td>Spring Boot DevTools</td><td>코드 수정 시 자동 재시작 등 개발 편의 기능</td></tr>
+        <tr><td>Thymeleaf</td><td>서버 사이드 HTML 템플릿 엔진(View)</td></tr>
+      </table>
+    </div>
+
+    <div class="concept"><h3 class="blk">📖 pom.xml — 추가된 의존성</h3>
+      <p>선택한 스타터는 <code>pom.xml</code>의 <code>&lt;dependencies&gt;</code>에 자동으로 등록됩니다.</p>
+<pre><span class="g">&lt;dependencies&gt;</span>
+    <span class="g">&lt;dependency&gt;</span>
+        <span class="g">&lt;groupId&gt;</span>org.springframework.boot<span class="g">&lt;/groupId&gt;</span>
+        <span class="g">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="g">&lt;/artifactId&gt;</span>
+    <span class="g">&lt;/dependency&gt;</span>
+    <span class="g">&lt;dependency&gt;</span>
+        <span class="g">&lt;groupId&gt;</span>org.springframework.boot<span class="g">&lt;/groupId&gt;</span>
+        <span class="g">&lt;artifactId&gt;</span>spring-boot-devtools<span class="g">&lt;/artifactId&gt;</span>
+        <span class="g">&lt;scope&gt;</span>runtime<span class="g">&lt;/scope&gt;</span>
+        <span class="g">&lt;optional&gt;</span>true<span class="g">&lt;/optional&gt;</span>
+    <span class="g">&lt;/dependency&gt;</span>
+    <span class="g">&lt;dependency&gt;</span>
+        <span class="g">&lt;groupId&gt;</span>org.projectlombok<span class="g">&lt;/groupId&gt;</span>
+        <span class="g">&lt;artifactId&gt;</span>lombok<span class="g">&lt;/artifactId&gt;</span>
+        <span class="g">&lt;optional&gt;</span>true<span class="g">&lt;/optional&gt;</span>
+    <span class="g">&lt;/dependency&gt;</span>
+    <span class="g">&lt;dependency&gt;</span>
+        <span class="g">&lt;groupId&gt;</span>org.springframework.boot<span class="g">&lt;/groupId&gt;</span>
+        <span class="g">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="g">&lt;/artifactId&gt;</span>
+        <span class="g">&lt;scope&gt;</span>test<span class="g">&lt;/scope&gt;</span>
+    <span class="g">&lt;/dependency&gt;</span>
+<span class="g">&lt;/dependencies&gt;</span></pre>
+    </div>
+
+    <div class="concept"><h3 class="blk">📖 프로젝트 구조 (프레임워크 구조)</h3>
+      <pre>jwboot
+├─ src/main/java
+│   └─ com.space
+│       └─ JwbootApplication.java   <span class="c">// main() — 실행 진입점</span>
+├─ src/main/resources
+│   ├─ static        <span class="c">// css, js, image (정적)</span>
+│   ├─ templates     <span class="c">// html (Thymeleaf, 동적)</span>
+│   └─ application.properties  <span class="c">// 서버·DB 설정</span>
+└─ pom.xml           <span class="c">// 의존성 관리</span></pre>
+      <table>
+        <tr><th>위치</th><th>용도</th></tr>
+        <tr><td><code>src/main/java</code></td><td><b>Java 파일</b> — 컨트롤러 등 소스 코드</td></tr>
+        <tr><td><code>templates</code></td><td><b>동적 : html 파일</b> — Thymeleaf 템플릿</td></tr>
+        <tr><td><code>static</code></td><td><b>정적 파일</b> — css, js, image</td></tr>
+        <tr><td><code>application.properties</code></td><td><b>설정 파일</b> — 서버 설정, DB 연결 등</td></tr>
+      </table>
+    </div>
+
+    <div class="lab"><div class="lbl">🛠️ 따라하기 ③ 실행 & 접속</div>
+      <ol class="steps">
+        <li>메인 클래스 <code>JwbootApplication</code>을 열고 <b>▶ 실행(Run)</b> 버튼 클릭 (또는 <code>Shift+F10</code>)</li>
+        <li>콘솔에 내장 톰캣이 <b>8080 포트</b>로 기동되는 로그 확인</li>
+        <li>브라우저에서 <code>http://localhost:8080</code> 접속</li>
+      </ol>
+      <div class="note"><span class="lbl">💡 참고</span> &nbsp;아직 매핑된 페이지가 없으면 스프링부트의 기본 <b>Whitelabel Error Page</b>가 표시됩니다. 정상 동작이니 다음 단계에서 페이지를 만들어 봅니다.</div>
+    </div>
+  </section>
+
+  <!-- ================= MODULE 4 ================= -->
+  <section class="module" id="m4">
+    <h2><span class="num">4</span> 정적 파일 &amp; 정적 페이지 (static)</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li><code>static</code> 폴더의 역할을 이해한다.</li>
+      <li>정적 HTML 파일과 이미지를 배치하고 브라우저로 확인할 수 있다.</li>
+    </ul></div>
+
+    <div class="concept"><h3 class="blk">📖 static 폴더란?</h3>
+      <p><code>src/main/resources/static</code> 폴더에 둔 파일은 <b>컨트롤러 없이도</b> URL로 바로 접근할 수 있는 <b>정적 리소스</b>입니다. 폴더 경로가 곧 URL 경로가 됩니다.</p>
+      <div class="note"><span class="lbl">📁 경로 규칙</span> &nbsp;<code>static/hello.html</code> → <code>http://localhost:8080/hello.html</code> &nbsp;(static은 URL에서 생략)</div>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 예제 — static &gt; hello.html</div>
+<pre><span class="g">&lt;!DOCTYPE html&gt;</span>
+<span class="g">&lt;html&gt;</span>
+<span class="g">&lt;head&gt;</span>
+<span class="g">&lt;meta</span> charset=<span class="s">"UTF-8"</span><span class="g">&gt;</span>
+<span class="g">&lt;title&gt;</span>hello~<span class="g">&lt;/title&gt;</span>
+<span class="g">&lt;/head&gt;</span>
+<span class="g">&lt;body&gt;</span>
+    <span class="g">&lt;h2&gt;</span>Hello~ 스프링부트!<span class="g">&lt;/h2&gt;</span>
+<span class="g">&lt;/body&gt;</span>
+<span class="g">&lt;/html&gt;</span></pre>
+      <div class="browser">
+        <div class="bar"><i class="r"></i><i class="y"></i><i class="gr"></i><span class="url">http://localhost:8080/hello.html</span></div>
+        <div class="page"><h2 style="margin:0">Hello~ 스프링부트!</h2></div>
+      </div>
+    </div>
+
+    <div class="concept"><h3 class="blk">📖 이미지 등 정적 리소스</h3>
+      <p>이미지도 static 하위에 폴더로 정리합니다. 예: <code>static/images/time.jpg</code> → <code>/images/time.jpg</code>로 참조.</p>
+      <div class="note"><span class="lbl">💡 활용</span> &nbsp;HTML/CSS에서 <code>src="/images/time.jpg"</code>, <code>href="/css/style.css"</code> 처럼 <b>/(루트) 기준 경로</b>로 정적 파일을 불러옵니다.</div>
+    </div>
+  </section>
+
+  <!-- ================= MODULE 5 ================= -->
+  <section class="module" id="m5">
+    <h2><span class="num">5</span> 메인 페이지 만들기 (Controller)</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>컨트롤러로 URL을 매핑하고 View(템플릿)를 반환할 수 있다.</li>
+      <li>뷰 리졸버(View Resolver)가 View 이름을 실제 HTML 파일로 찾는 원리를 이해한다.</li>
+      <li>templates(동적) · static(정적)을 함께 사용해 페이지를 구성할 수 있다.</li>
+    </ul></div>
+
+    <div class="concept"><h3 class="blk">📖 컨트롤러를 사용한 URL 매핑</h3>
+      <p>정적 파일과 달리, 동적 페이지는 <b>컨트롤러</b>가 요청 URL을 받아 <b>View 이름</b>을 반환합니다. 뷰 리졸버가 그 이름으로 <code>templates</code> 폴더에서 HTML을 찾습니다.</p>
+      <div class="flow">
+        <div class="box"><b>요청</b><small>/ 접속</small></div>
+        <div class="arr">→</div>
+        <div class="box"><b>Controller</b><small>@GetMapping("/")</small></div>
+        <div class="arr">→</div>
+        <div class="box"><b>return "home"</b><small>View 이름 반환</small></div>
+        <div class="arr">→</div>
+        <div class="box"><b>View Resolver</b><small>templates/home.html</small></div>
+      </div>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 예제 — HomeController.java</div>
+<pre><span class="k">import</span> org.springframework.stereotype.<span class="t">Controller</span>;
+<span class="k">import</span> org.springframework.ui.<span class="t">Model</span>;
+<span class="k">import</span> org.springframework.web.bind.annotation.<span class="t">GetMapping</span>;
+
+<span class="k">@Controller</span>
+<span class="k">public class</span> <span class="t">HomeController</span> {
+
+    <span class="k">@GetMapping</span>(<span class="s">"/"</span>)
+    <span class="k">public</span> <span class="t">String</span> <span class="f">home</span>(<span class="t">Model</span> model) {
+        <span class="c">// 모델(message)에 문자열을 담아 보내기</span>
+        model.<span class="f">addAttribute</span>(<span class="s">"message"</span>, <span class="s">"Hello~ Thymeleaf!"</span>);
+        <span class="k">return</span> <span class="s">"home"</span>;         <span class="c">// 파일: templates/home.html</span>
+    }
+
+    <span class="k">@GetMapping</span>(<span class="s">"/time"</span>)
+    <span class="k">public</span> <span class="t">String</span> <span class="f">time</span>() {
+        <span class="k">return</span> <span class="s">"/pages/time"</span>;  <span class="c">// 파일: templates/pages/time.html</span>
+    }
+}</pre>
+      <div class="note"><span class="lbl">💡 Model</span> &nbsp;<code>model.addAttribute("이름", 값)</code> 으로 담은 데이터는 Thymeleaf에서 <code>th:text="${이름}"</code> 으로 화면에 출력합니다.</div>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 예제 — templates &gt; home.html</div>
+<pre><span class="g">&lt;!DOCTYPE html&gt;</span>
+<span class="g">&lt;html&gt;</span>
+<span class="g">&lt;head&gt;</span>
+<span class="g">&lt;meta</span> charset=<span class="s">"UTF-8"</span><span class="g">&gt;</span>
+<span class="g">&lt;title&gt;</span>home<span class="g">&lt;/title&gt;</span>
+<span class="g">&lt;link</span> rel=<span class="s">"stylesheet"</span> href=<span class="s">"/css/style.css"</span><span class="g">&gt;</span>
+<span class="g">&lt;/head&gt;</span>
+<span class="g">&lt;body&gt;</span>
+    <span class="g">&lt;div</span> id=<span class="s">"content"</span><span class="g">&gt;</span>
+        <span class="g">&lt;h2&gt;</span>홈페이지 방문을 진심으로 환영합니다.<span class="g">&lt;/h2&gt;</span>
+        <span class="g">&lt;hr&gt;</span>
+        <span class="g">&lt;a</span> href=<span class="s">"/time"</span><span class="g">&gt;</span>시간 페이지로 이동<span class="g">&lt;/a&gt;</span>
+    <span class="g">&lt;/div&gt;</span>
+<span class="g">&lt;/body&gt;</span>
+<span class="g">&lt;/html&gt;</span></pre>
+      <p class="muted" style="margin:8px 0 0">실행: <code>http://localhost:8080/</code></p>
+      <div class="browser">
+        <div class="bar"><i class="r"></i><i class="y"></i><i class="gr"></i><span class="url">http://localhost:8080/</span></div>
+        <div class="page" style="text-align:center">
+          <h2 style="margin:0 0 8px">홈페이지 방문을 진심으로 환영합니다.</h2>
+          <hr>
+          <a href="#" onclick="return false">시간 페이지로 이동</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 예제 — templates &gt; pages &gt; time.html</div>
+<pre><span class="g">&lt;head&gt;</span>
+<span class="g">&lt;meta</span> charset=<span class="s">"UTF-8"</span><span class="g">&gt;</span>
+<span class="g">&lt;title&gt;</span>시간 이란..<span class="g">&lt;/title&gt;</span>
+<span class="g">&lt;link</span> rel=<span class="s">"stylesheet"</span> href=<span class="s">"/css/style.css"</span><span class="g">&gt;</span>
+<span class="g">&lt;script</span> src=<span class="s">"/js/time.js"</span><span class="g">&gt;&lt;/script&gt;</span>
+<span class="g">&lt;/head&gt;</span>
+<span class="g">&lt;body&gt;</span>
+    <span class="g">&lt;div</span> id=<span class="s">"content"</span><span class="g">&gt;</span>
+        <span class="g">&lt;h2&gt;</span>시간이란..<span class="g">&lt;/h2&gt;</span>
+        <span class="g">&lt;h3&gt;</span>내일 죽을 것처럼 오늘을 살고<span class="g">&lt;br&gt;</span>
+            영원히 살 것처럼 내일을 꿈꾸어라
+        <span class="g">&lt;/h3&gt;</span>
+        <span class="g">&lt;img</span> alt=<span class="s">"시계"</span> src=<span class="s">"/images/time.jpg"</span><span class="g">&gt;</span>
+        <span class="g">&lt;p</span> id=<span class="s">"display"</span><span class="g">&gt;&lt;/p&gt;</span>
+    <span class="g">&lt;/div&gt;</span>
+<span class="g">&lt;/body&gt;</span>
+<span class="g">&lt;/html&gt;</span></pre>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 예제 — static &gt; css &gt; style.css</div>
+<pre><span class="k">@charset</span> <span class="s">"UTF-8"</span>;
+
+<span class="f">#content</span>{
+    <span class="t">width</span>: <span class="n">90%</span>;
+    <span class="t">margin</span>: <span class="n">40px</span> auto;
+    <span class="t">text-align</span>: center;
+}</pre>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 예제 — static &gt; js &gt; time.js (실시간 시계)</div>
+<pre><span class="c">/* setInterval(myWatch, 1000);
+
+function myWatch(){
+    let date = new Date();
+    let now = date.toLocaleTimeString();
+    document.getElementById("display").innerHTML = now;
+} */</span>
+
+<span class="f">setInterval</span>(() =&gt; {
+    <span class="k">let</span> date = <span class="k">new</span> <span class="t">Date</span>();
+    <span class="k">let</span> now = date.<span class="f">toLocaleTimeString</span>();
+    <span class="t">document</span>.<span class="f">getElementById</span>(<span class="s">"display"</span>).innerHTML = now;
+}, <span class="n">1000</span>);</pre>
+      <p class="muted" style="margin:8px 0 0"><code>setInterval</code>이 1초(1000ms)마다 현재 시각을 <code>#display</code>에 출력 → 화면에서 시계가 실시간으로 갱신됩니다.</p>
+    </div>
+
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 1-1. 소개 페이지 만들기</h4>
+      <p><code>HomeController</code>에 <code>/about</code> 매핑을 추가하고, <code>templates/pages/about.html</code>을 만들어 본인 소개를 출력하세요. (View 이름은 <code>"/pages/about"</code>)</p>
+      <details><summary>정답 보기</summary>
+<pre><span class="c">// HomeController.java 에 메소드 추가</span>
+<span class="k">@GetMapping</span>(<span class="s">"/about"</span>)
+<span class="k">public</span> <span class="t">String</span> <span class="f">about</span>() {
+    <span class="k">return</span> <span class="s">"/pages/about"</span>;  <span class="c">// templates/pages/about.html</span>
+}</pre>
+<pre><span class="c">&lt;!-- templates/pages/about.html --&gt;</span>
+<span class="g">&lt;!DOCTYPE html&gt;</span>
+<span class="g">&lt;html&gt;&lt;head&gt;&lt;meta</span> charset=<span class="s">"UTF-8"</span><span class="g">&gt;&lt;title&gt;</span>about<span class="g">&lt;/title&gt;&lt;/head&gt;</span>
+<span class="g">&lt;body&gt;</span>
+    <span class="g">&lt;h2&gt;</span>홍길동입니다<span class="g">&lt;/h2&gt;</span>
+    <span class="g">&lt;p&gt;</span>스프링부트를 배우는 중입니다.<span class="g">&lt;/p&gt;</span>
+<span class="g">&lt;/body&gt;&lt;/html&gt;</span></pre>
+        <div class="out">홍길동입니다<br>스프링부트를 배우는 중입니다.</div>
+        <p class="muted"><code>http://localhost:8080/about</code> 접속 → 컨트롤러가 <code>/pages/about.html</code>을 찾아 응답한다.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MODULE 6 ================= -->
+  <section class="module" id="m6">
+    <h2><span class="num">6</span> 스프링 MVC &amp; 컨트롤러 어노테이션</h2>
+    <div class="goal"><div class="lbl">🎯 학습목표</div><ul>
+      <li>스프링 MVC의 3계층 구조와 각 계층의 어노테이션을 설명할 수 있다.</li>
+      <li>컨트롤러의 역할과 디스패처 서블릿의 관계를 이해한다.</li>
+      <li><code>@RequestMapping</code>, <code>@GetMapping</code>, <code>@RestController</code>를 구분해 사용할 수 있다.</li>
+    </ul></div>
+
+    <div class="concept"><h3 class="blk">📖 계층적 구조 (MVC) 구현 과정</h3>
+      <p>스프링 MVC는 역할별로 클래스를 나눠 <b>계층(Layer)</b>으로 구성합니다. 각 계층은 대표 파일과 역할을 가집니다.</p>
+      <table>
+        <tr><th>계층</th><th>구성 요소</th><th>예시 파일</th></tr>
+        <tr><td>프레젠테이션 계층</td><td>컨트롤러(Controller) · 뷰(View)</td><td><code>MemberController.java</code> · <code>members.html</code></td></tr>
+        <tr><td>비즈니스 계층</td><td>서비스(Service)</td><td><code>MemberService.java</code></td></tr>
+        <tr><td>퍼시스턴스 계층</td><td>모델(Model) · 도메인 객체 · 리포지토리</td><td><code>Member.java</code> · <code>MemberRepository.java</code></td></tr>
+      </table>
+      <div class="flow">
+        <div class="box"><b>Controller</b><small>요청/응답</small></div>
+        <div class="arr">→</div>
+        <div class="box"><b>Service</b><small>비즈니스 로직</small></div>
+        <div class="arr">→</div>
+        <div class="box"><b>Repository</b><small>DB 접근(CRUD)</small></div>
+      </div>
+    </div>
+
+    <div class="concept"><h3 class="blk">📖 스프링 MVC의 3계층 구조</h3>
+      <table>
+        <tr><th>계층</th><th class="c">어노테이션</th><th>역할</th></tr>
+        <tr><td>Controller</td><td class="c"><code>@Controller</code></td><td>클라이언트 요청 처리, 화면(View) 반환</td></tr>
+        <tr><td>Service</td><td class="c"><code>@Service</code></td><td>비즈니스 로직 수행</td></tr>
+        <tr><td>Repository</td><td class="c"><code>@Repository</code></td><td>데이터베이스 접근, CRUD 처리</td></tr>
+      </table>
+    </div>
+
+    <div class="concept"><h3 class="blk">📖 컨트롤러란?</h3>
+      <p>스프링부트가 웹에서 사용자 요청을 받으면, 가장 먼저 내장 톰캣 서버의 <b>디스패처 서블릿(DispatcherServlet)</b>으로 전달합니다. 디스패처 서블릿은 <b>요청을 받는 창구 역할</b>만 하고, 실제 처리는 <b>컨트롤러(Controller)</b>가 담당합니다.</p>
+      <div class="flow">
+        <div class="box"><b>요청</b><small>브라우저</small></div>
+        <div class="arr">→</div>
+        <div class="box"><b>DispatcherServlet</b><small>요청 창구</small></div>
+        <div class="arr">→</div>
+        <div class="box"><b>Controller</b><small>실제 처리</small></div>
+        <div class="arr">→</div>
+        <div class="box"><b>View Resolver</b><small>HTML 응답</small></div>
+      </div>
+      <div class="note"><span class="lbl">📌 @Controller</span> &nbsp;사용자 요청을 받아 <b>뷰(View)로 보여줄 HTML</b>을 반환하는 클래스를 지정하는 어노테이션. 처리 결과를 <b>뷰 리졸버</b>를 통해 HTML 파일로 찾아 응답합니다.</div>
+      <div class="note"><span class="lbl">📌 @Repository</span> &nbsp;데이터 접근 계층(DAO/Repository)을 나타내는 어노테이션. <b>DB와 직접 통신</b>하는 클래스임을 스프링에 알립니다. 스프링이 자동 감지해 <b>빈(Bean)으로 등록</b>하므로, <code>@Autowired</code>나 생성자 주입으로 바로 사용할 수 있습니다.</div>
+    </div>
+
+    <div class="concept"><h3 class="blk">📖 @RequestMapping — 요청 매칭 경로 설정</h3>
+      <p>요청 URL과 HTTP 메소드를 컨트롤러 메소드에 연결합니다.</p>
+<pre><span class="k">@RequestMapping</span>(value=<span class="s">"URL"</span>, method=<span class="t">RequestMethod</span>.<span class="n">GET</span>)
+
+<span class="c">// 단축형 (GET/POST 구분이 필요 없을 때)</span>
+<span class="k">@RequestMapping</span>(<span class="s">"URL"</span>)</pre>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 예제 ① — @RequestMapping (Exam01Controller)</div>
+<pre><span class="k">@Controller</span>
+<span class="k">public class</span> <span class="t">Exam01Controller</span> {
+
+    <span class="c">// @RequestMapping(value="/exam01", method=RequestMethod.GET)</span>
+    <span class="k">@RequestMapping</span>(<span class="s">"/exam01"</span>)
+    <span class="k">public</span> <span class="t">String</span> <span class="f">requestMethod</span>() {
+        <span class="k">return</span> <span class="s">"pages/view01"</span>;   <span class="c">// view01.html</span>
+    }
+}</pre>
+<pre><span class="c">&lt;!-- templates/pages/view01.html --&gt;</span>
+<span class="g">&lt;title&gt;</span>RequestMapping 예제<span class="g">&lt;/title&gt;</span>
+<span class="g">&lt;body&gt;</span>
+    <span class="g">&lt;h2&gt;</span>RequestMapping 예제<span class="g">&lt;/h2&gt;</span>
+    <span class="g">&lt;p&gt;</span>웹 요청 URL은 /exam01 입니다.<span class="g">&lt;/p&gt;</span>
+<span class="g">&lt;/body&gt;</span></pre>
+      <div class="browser">
+        <div class="bar"><i class="r"></i><i class="y"></i><i class="gr"></i><span class="url">http://localhost:8080/exam01</span></div>
+        <div class="page"><h2 style="margin:0 0 4px">RequestMapping 예제</h2><p style="margin:0">웹 요청 URL은 /exam01 입니다.</p></div>
+      </div>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 예제 ② — @RestController (Exam02Controller)</div>
+      <div class="note"><span class="lbl">📌 @RestController</span> &nbsp;RESTful 웹 서비스(API)를 만들 때 사용. 화면(HTML)을 반환하는 <code>@Controller</code>와 달리, <b>데이터(JSON/문자열/XML)를 직접 반환</b>합니다.</div>
+<pre><span class="k">@RequestMapping</span>(<span class="s">"/exam02"</span>)
+<span class="k">@RestController</span>
+<span class="k">public class</span> <span class="t">Exam02Controller</span> {
+
+    <span class="k">@RequestMapping</span>
+    <span class="k">public</span> <span class="t">String</span> <span class="f">requestMethod</span>() {
+        <span class="k">return</span> <span class="s">"&lt;h2&gt;@RestController 예제 입니다.&lt;/h2&gt;"</span>;
+    }
+}</pre>
+      <div class="browser">
+        <div class="bar"><i class="r"></i><i class="y"></i><i class="gr"></i><span class="url">http://localhost:8080/exam02</span></div>
+        <div class="page"><h2 style="margin:0">@RestController 예제 입니다.</h2></div>
+      </div>
+      <p class="muted" style="margin:8px 0 0">반환한 문자열이 <b>View 이름이 아니라 응답 본문(body) 그대로</b> 브라우저에 출력됩니다.</p>
+    </div>
+
+    <div class="ex"><div class="lbl">💡 예제 ③ — @GetMapping (Exam03Controller)</div>
+      <div class="note"><span class="lbl">📌 @GetMapping</span> &nbsp;<code>@RequestMapping(method=GET)</code>의 단축 어노테이션. GET 요청 전용이라 코드가 간결합니다. (POST는 <code>@PostMapping</code>)</div>
+<pre><span class="k">@Controller</span>
+<span class="k">public class</span> <span class="t">Exam03Controller</span> {
+
+    <span class="k">@GetMapping</span>(<span class="s">"/exam03"</span>)
+    <span class="k">public</span> <span class="t">String</span> <span class="f">requestMethod</span>() {
+        <span class="k">return</span> <span class="s">"pages/view02"</span>;   <span class="c">// view02.html</span>
+    }
+}</pre>
+      <div class="browser">
+        <div class="bar"><i class="r"></i><i class="y"></i><i class="gr"></i><span class="url">http://localhost:8080/exam03</span></div>
+        <div class="page"><h2 style="margin:0 0 4px">RequestMapping 예제</h2><p style="margin:0">웹 요청 URL은 /exam03 입니다.</p></div>
+      </div>
+    </div>
+
+    <div class="lab"><div class="lbl">✏️ 실습문제</div>
+      <h4>실습 1-2. @RestController로 인사 API 만들기</h4>
+      <p><code>HelloApiController</code>를 만들어 <code>/hello-api</code> 요청 시 <b>"안녕하세요, 스프링부트!"</b> 문자열을 브라우저에 직접 출력하세요.</p>
+      <details><summary>정답 보기</summary>
+<pre><span class="k">@RestController</span>
+<span class="k">public class</span> <span class="t">HelloApiController</span> {
+
+    <span class="k">@GetMapping</span>(<span class="s">"/hello-api"</span>)
+    <span class="k">public</span> <span class="t">String</span> <span class="f">hello</span>() {
+        <span class="k">return</span> <span class="s">"안녕하세요, 스프링부트!"</span>;
+    }
+}</pre>
+        <div class="out">안녕하세요, 스프링부트!</div>
+        <p class="muted"><code>@RestController</code> + <code>@GetMapping</code> 조합이면, 반환 문자열이 그대로 응답 본문이 되어 화면에 출력된다.</p>
+      </details>
+    </div>
+  </section>
+
+  <footer>1장. 스프링부트 개발 환경 &amp; 컨트롤러 · 학습 교안<br>모듈별 학습목표 · 개념 · 예제(실행결과) · 실습문제(정답) 구성</footer>
+</div>
+</body>
+</html>

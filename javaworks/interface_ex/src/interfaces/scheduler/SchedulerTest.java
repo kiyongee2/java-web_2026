@@ -14,6 +14,8 @@ public class SchedulerTest {
 		
 		if(ch == 'R' || ch == 'r') {
 			scheduler = new RoundRobin();
+		}else if(ch == 'L' || ch == 'l') {
+			//
 		}
 		
 		scheduler.getNextCall();
