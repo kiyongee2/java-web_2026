@@ -1,0 +1,11 @@
+
+spring:
+  application:
+    name: jwboot
+  thymeleaf:
+    cache: false            # 개발 중 템플릿 캐시 끄기(수정 즉시 반영)
+    prefix: classpath:/templates/
+    suffix: .html
+  devtools:
+    restart:
+      enabled: true       # 코드 저장 시 자동 재시작

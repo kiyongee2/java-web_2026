@@ -167,22 +167,37 @@
       <li>프로젝트 구조를 이해하고 애플리케이션을 실행할 수 있다.</li>
     </ul></div>
 
-    <div class="lab"><div class="lbl">🛠️ 따라하기 ① 프로젝트 생성</div>
-      <p>메뉴: <code>[File] → [New] → [Project…]</code> → 왼쪽 목록에서 <b>Spring Boot</b>(Spring Initializr) 선택</p>
+        <div class="lab"><div class="lbl">🛠️ 따라하기 ① 프로젝트 생성</div>
+
+      <h4>1) Spring Initializr에서 프로젝트 생성 — <code>https://start.spring.io</code></h4>
+      <p>설정값은 교재의 <b>jwboot</b> 프로젝트 기준입니다.</p>
       <table>
         <tr><th>항목</th><th>값</th></tr>
-        <tr><td>Name</td><td><code>jwboot</code></td></tr>
-        <tr><td>Type</td><td><b>Maven</b></td></tr>
-        <tr><td>Packaging</td><td><b>Jar</b></td></tr>
-        <tr><td>Java Version</td><td><b>21</b></td></tr>
+        <tr><td>Project</td><td><b>Maven</b></td></tr>
+        <tr><td>Language</td><td><b>Java</b></td></tr>
+        <tr><td>Spring Boot</td><td><b>4.1.0</b> <span class="muted">(SNAPSHOT/M 버전이 아닌 정식 버전)</span></td></tr>
         <tr><td>Group</td><td><code>com.space</code></td></tr>
-        <tr><td>Package</td><td><code>com.space</code></td></tr>
+        <tr><td>Artifact</td><td><code>jwboot</code></td></tr>
+        <tr><td>Package name</td><td><code>com.space</code></td></tr>
+        <tr><td>Packaging</td><td><b>Jar</b></td></tr>
+        <tr><td>Java</td><td><b>21</b></td></tr>
+        <tr><td>Dependencies (ADD)</td><td><span class="pill">Spring Web</span><span class="pill">Thymeleaf</span><span class="pill">Lombok</span><span class="pill">Spring Boot DevTools</span></td></tr>
       </table>
-      <div class="note"><span class="lbl">💡 Community 에디션은?</span> &nbsp;Spring Boot 생성 마법사는 <b>Ultimate</b>(및 최신 Community)에 있습니다. 없다면 <code>https://start.spring.io</code>에서 동일한 항목으로 생성해 zip을 받은 뒤 <code>[File] → [Open]</code>으로 열면 됩니다.</div>
+      <p class="muted"><b>GENERATE</b> 클릭 → zip 다운로드 → 원하는 위치에 압축 해제</p>
+
+      <h4>2) IntelliJ에서 열기</h4>
+      <p><code>File → Open</code> → 압축 푼 <b>폴더</b>(또는 그 안의 <code>pom.xml</code>) 선택 → <b>Open as Project</b>. 우측 하단에 뜨는 <b>Maven import</b>를 기다리면 의존성이 자동으로 내려받아집니다.</p>
+      <div class="note"><span class="lbl">💡 IntelliJ Ultimate</span> &nbsp;<code>New Project → Spring Boot</code>로 위 생성 과정을 IDE 안에서 바로 진행할 수 있습니다. (Community 에디션은 위 start.spring.io 방식을 사용)</div>
+
+      <h4>3) 코딩 전 확인 2가지</h4>
+      <ol class="steps">
+        <li><code>File → Project Structure → Project</code>에서 <b>SDK가 JDK 21</b>인지 확인</li>
+        <li>Lombok을 쓰므로 <code>Settings → Build, Execution, Deployment → Compiler → Annotation Processors</code>에서 <b>Enable annotation processing</b> 체크 <span class="muted">(플러그인은 최신 IntelliJ에 기본 내장)</span></li>
+      </ol>
     </div>
 
     <div class="lab"><div class="lbl">🛠️ 따라하기 ② 모듈(스타터) 추가</div>
-      <p>생성 마법사의 <b>Dependencies</b> 단계에서 다음 4개 의존성을 추가합니다. Spring Boot Version은 <b>3.4.10</b>을 선택합니다.</p>
+      <p>생성 마법사의 <b>Dependencies</b> 단계에서 다음 4개 의존성을 추가합니다. Spring Boot Version은 <b>4.1.0</b>을 선택합니다.</p>
       <p><span class="pill">Lombok</span><span class="pill">Spring Web</span><span class="pill">Spring Boot DevTools</span><span class="pill">Thymeleaf</span></p>
       <table>
         <tr><th>모듈</th><th>역할</th></tr>
@@ -234,8 +249,34 @@
         <tr><td><code>src/main/java</code></td><td><b>Java 파일</b> — 컨트롤러 등 소스 코드</td></tr>
         <tr><td><code>templates</code></td><td><b>동적 : html 파일</b> — Thymeleaf 템플릿</td></tr>
         <tr><td><code>static</code></td><td><b>정적 파일</b> — css, js, image</td></tr>
-        <tr><td><code>application.properties</code></td><td><b>설정 파일</b> — 서버 설정, DB 연결 등</td></tr>
+        <tr><td><code>application.properties</code></td><td><b>설정 파일</b> — 서버 설정, DB 연결 등 (<code>application.yml</code>로 대체 가능)</td></tr>
       </table>
+    </div>
+
+    <div class="concept"><h3 class="blk">📖 환경 설정 파일 — application.yml (YAML)</h3>
+      <p>스프링부트 설정은 <code>application.properties</code> 대신 계층 구조가 한눈에 보이는 <b><code>application.yml</code></b>로 작성할 수 있습니다. <code>src/main/resources</code>에 <code>application.yml</code>을 새로 만들거나, 기존 <code>application.properties</code>의 확장자를 <code>.yml</code>로 바꾸면 됩니다.</p>
+      <div class="note"><span class="lbl">💡 properties ↔ yml</span> &nbsp;<code>server.port=8080</code> 처럼 <b>점(.)으로 이어 쓰던 키</b>를 YAML에서는 <b>들여쓰기 계층</b>으로 나눠 씁니다. 두 파일이 함께 있으면 <code>.properties</code>가 우선합니다.</div>
+<pre><span class="c"># src/main/resources/application.yml</span>
+<span class="t">server</span>:
+  <span class="t">port</span>: <span class="n">8080</span>
+
+<span class="t">spring</span>:
+  <span class="t">application</span>:
+    <span class="t">name</span>: <span class="s">jwboot</span>
+  <span class="t">thymeleaf</span>:
+    <span class="t">cache</span>: <span class="k">false</span>            <span class="c"># 개발 중 템플릿 캐시 끄기(수정 즉시 반영)</span>
+    <span class="t">prefix</span>: <span class="s">classpath:/templates/</span>
+    <span class="t">suffix</span>: <span class="s">.html</span>
+  <span class="t">devtools</span>:
+    <span class="t">restart</span>:
+      <span class="t">enabled</span>: <span class="k">true</span>       <span class="c"># 코드 저장 시 자동 재시작</span></pre>
+      <p class="muted" style="margin:8px 0 0">위 YAML은 아래 properties와 동일한 설정입니다.</p>
+<pre><span class="c"># 같은 설정을 application.properties로 쓰면</span>
+<span class="t">server.port</span>=<span class="n">8080</span>
+<span class="t">spring.application.name</span>=<span class="s">jwboot</span>
+<span class="t">spring.thymeleaf.cache</span>=<span class="k">false</span>
+<span class="t">spring.devtools.restart.enabled</span>=<span class="k">true</span></pre>
+      <div class="note"><span class="lbl">⚠️ YAML 작성 규칙</span> &nbsp;① 들여쓰기는 <b>공백 2칸</b>(탭 금지) &nbsp;② <code>키:</code> 뒤에 <b>값과 한 칸 띄우기</b> &nbsp;③ 같은 계층은 들여쓰기를 정확히 맞춥니다.</div>
     </div>
 
     <div class="lab"><div class="lbl">🛠️ 따라하기 ③ 실행 & 접속</div>
