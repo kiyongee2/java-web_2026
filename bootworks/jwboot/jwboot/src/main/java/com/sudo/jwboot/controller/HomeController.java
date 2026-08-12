@@ -15,4 +15,9 @@ public class HomeController {
     public String time() {
         return "/pages/time";  // 파일: templates/pages/time.html
     }
+
+    @GetMapping("/about")
+    public String about(){
+        return "/pages/about";
+    }
 }
