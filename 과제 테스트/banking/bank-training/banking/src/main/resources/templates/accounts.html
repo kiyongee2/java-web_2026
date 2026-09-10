@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>banking system</title>
+    <link rel="stylesheet" th:href="@{css/style.css}">
+</head>
+<body>
+    <div class="wrap">
+        <h1>은행 계좌 관리</h1>
+
+        <h2>계좌 목록</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>계좌번호</th><th>예금주</th><th class="r">잔액</th><th class="c">관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="a : ${accounts}">
+                    <td th:text="${a.accountNumber}">110-0001</td>
+                    <td th:text="${a.owner}">김기용</td>
+                    <td class="r" th:text="${#numbers.formatInteger(a.balance, 0, 'COMMA')} + '원'">100,000원</td>
+                    <td class="c">
+                        <form th:action="@{'/accounts' + ${a.accountNumber} + '/delete'}" method="post"
+                            onsubmit="return confirm('정말 해지하시겠습니까?')">
+                            <button class="danger">해지</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${accounts.isEmpty()}">
+                    <td colspan="4" class="empty">등록한 계좌가 없습니다.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 기능 폼들 -->
+        <div class="cards">
+            <div class="card">
+                <h3>+ 계좌 개설</h3>
+                <form th:action="@{/accounts/create}" method="post">
+                    <label for="owner">예금주<input type="text" name="owner" id="owner" required></label>
+                    <label for="initialBalance">초기 입금액<input  type="number"
+                        name="initialBalance" id="initialBalance" value="0" min="0"></label>
+                    <button>개설</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>입금</h3>
+                <form th:action="@{/accounts/deposit}" method="post">
+                    <label for="no">계좌번호<input type="text" name="no" id="no" placeholder="110-0001" required></label>
+                    <label for="amount">입금액<input  type="number"
+                                   name="amount" id="amount" value="10000" min="1" required></label>
+                    <button>입금</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
